@@ -8,7 +8,12 @@ import { demoBuildings } from '../core/seed';
 import type { Assessment, Household } from '../core/types';
 import { firebase, setLocalConfig } from '../firebase';
 import { removeHousehold, saveHousehold } from '../store';
-import { Chip, INCIDENT_LABEL, PRIORITY_TEXT, SourceChip, useHouseholds, useLiveConfig, useNow, useOnline } from './common';
+import { RegistryCard, RoutePlan, SelfReportsCard, TEAM_COLORS } from './BoardExtras';
+import { Ics214Button } from './Ics214';
+import { Chip, INCIDENT_LABEL, PRIORITY_TEXT, SourceChip, useAttempts, useHouseholds, useLiveConfig, useNow, useOnline, useRegistry, useSelfReports } from './common';
+import { membership } from '../store';
+import { useEffect } from 'preact/hooks';
+import { DEFAULT_ROUTE } from '../core/route';
 
 const BUILDINGS = demoBuildings();
 const byId = new Map(BUILDINGS.map((b) => [b.id, b]));
@@ -28,6 +33,11 @@ export function Board() {
   const [lines, setLines] = useState<Record<string, { text: string; source?: string }>>({});
   const [lang, setLang] = useState('');
   const [translated, setTranslated] = useState<Record<string, string>>({});
+  const attempts = useAttempts();
+  const reports = useSelfReports();
+  const registry = useRegistry();
+  const [isCoord, setIsCoord] = useState(false);
+  useEffect(() => { membership().then((r) => setIsCoord(r === 'coordinator')); }, []);
 
   const rows = useMemo(() => list
     .map((h) => ({ h, a: assess(h, cfg.incidentType, cfg.rulebook, h.reportedAt, now) }))
@@ -36,6 +46,10 @@ export function Board() {
 
   const visited = new Set(list.map((h) => h.buildingId).filter(Boolean));
   const unvisited = BUILDINGS.filter((b) => !visited.has(b.id));
+  const attemptedIds = new Set(attempts.map((a) => a.buildingId));
+  const knownIds = new Set(registry.map((r) => r.buildingId));
+  const selfBy = new Map(reports.map((r) => [r.buildingId, r]));
+  const knownUnchecked = unvisited.filter((b) => knownIds.has(b.id) && !selfBy.has(b.id)).length;
   const p1 = rows.filter((r) => r.a.priority === 'P1').length;
   const overdue = rows.filter((r) => r.a.overdue).length;
   const recheckDue = rows.filter((r) => r.a.nextCheckBy <= now).length;
@@ -43,9 +57,16 @@ export function Board() {
   const onDevice = list.filter((h) => h.source === 'on_device').length;
   const tapped = list.filter((h) => h.source === 'tap').length;
   const cloudPayload = list.map((h) => toCloudHousehold(h, h.buildingId ? byId.get(h.buildingId) : undefined, cfg.incidentType, cfg.rulebook, now));
+  const plan = useMemo(() => (list.length ? cloudRequest(cloudPayload, teams, cfg.incidentType).plan : []), [list, teams, cfg, Math.floor(now / 60000)]);
+  const stopLabel = (c: { building: string | null; ref: string }) => (c.building ? byId.get(c.building)?.label ?? c.ref : c.ref);
+  const bLabel = (id: string | null) => (id ? byId.get(id)?.label ?? id : 'Unmapped');
   const status = (b: string): { cls: string; a?: Assessment } => {
     const r = rows.find((x) => x.h.buildingId === b);
-    if (!r) return { cls: 'unvisited' };
+    if (!r) {
+      const self = selfBy.get(b);
+      if (self) return { cls: self.status === 'need' ? 'selfneed' : 'selfok' };
+      return { cls: `${attemptedIds.has(b) ? 'attempted' : 'unvisited'} ${knownIds.has(b) ? 'known' : ''}` };
+    }
     return { cls: r.a.overdue ? 'overdue' : r.a.priority, a: r.a };
   };
 
@@ -81,19 +102,23 @@ export function Board() {
         <Kpi n={list.length} label="households found" />
         <Kpi n={p1} label="urgent" kind="P1" />
         <Kpi n={overdue} label="past time-to-harm" kind="overdue" />
-        <Kpi n={unvisited.length} label="homes nobody has checked" kind="unvisited" />
+        <Kpi n={unvisited.length - selfBy.size} label={knownUnchecked ? `homes nobody has checked · ${knownUnchecked} known-risk` : 'homes nobody has checked'} kind="unvisited" />
         <Kpi n={recheckDue} label="rechecks due now" />
         <Kpi n={0} label="cloud calls from doorsteps" kind="device" />
       </div>
-      <p class="small muted">Captured on device: {onDevice} · tapped: {tapped}. Doorstep notes and photos stayed on volunteers' phones.</p>
+      <p class="small muted">Captured on device: {onDevice} · tapped: {tapped} · no answer, hanger left: {attempts.length} · residents checked in: {reports.length}. Doorstep notes and photos stayed on volunteers' phones.</p>
 
       <div class="grid2">
         <div class="card">
-          <h3>Map <span class="muted small">grey glow = nobody has checked this home yet</span></h3>
+          <h3>Map <span class="muted small">grey glow = unchecked · red outline = known risk · amber dashes = no answer · dotted lines = team routes</span></h3>
           <svg viewBox="0 0 700 460" class="map" role="img" aria-label="Neighbourhood map">
             {['River Rd', 'Mill St', 'Church Ln', 'Market St', 'Hill Ave', 'Bridge St'].map((s, i) => (
               <g key={s}><line x1="30" x2="680" y1={50 + i * 70} y2={50 + i * 70} class="street" />
                 <text x="30" y={40 + i * 70} class="streetname">{s}</text></g>))}
+            <circle cx={DEFAULT_ROUTE.depot.x} cy={DEFAULT_ROUTE.depot.y} r="7" class="depot" /><text x={DEFAULT_ROUTE.depot.x + 10} y={DEFAULT_ROUTE.depot.y + 4} class="depot-t">Shelter</text>
+            {plan.map((t, i) => (
+              <polyline key={t.team} class="route-line" stroke={TEAM_COLORS[i % TEAM_COLORS.length]}
+                points={[DEFAULT_ROUTE.depot, ...t.stops.map((st) => (st.building ? byId.get(st.building) : undefined)).filter(Boolean) as { x: number; y: number }[]].map((p) => `${p.x},${p.y}`).join(' ')} />))}
             {BUILDINGS.map((b) => {
               const s = status(b.id);
               return (
@@ -141,6 +166,11 @@ export function Board() {
           <p class="small muted">Found by code (same building, different volunteers, no conflicting facts). You confirm every merge.</p>
         </div>)}
 
+      <div class="grid2">
+        <SelfReportsCard reports={reports} attempts={attempts} label={(id) => bLabel(id)} now={now} />
+        <RegistryCard buildings={BUILDINGS} registry={registry} canWrite={isCoord || !firebase()} />
+      </div>
+
       <div class="card">
         <h3>Run sheets for the next shift <Chip kind="cloud">Cloud</Chip></h3>
         <p class="small muted">Only the cloud sees every volunteer's records at once. Stop order is decided by code; the cloud writes the briefings, the bring-lists and the handover.</p>
@@ -148,10 +178,12 @@ export function Board() {
           <label>Teams <input type="number" min={1} max={8} value={teams} onInput={(e) => setTeams(Number((e.target as HTMLInputElement).value) || 1)} /></label>
           <button class="btn ghost" onClick={() => setShowPayload(!showPayload)}>{showPayload ? 'Hide' : 'Show'} exactly what is sent</button>
           <button class="btn primary" disabled={!!busy || !list.length} onClick={runSheet}>{busy || 'Generate run sheets'}</button>
+          <Ics214Button list={list} attempts={attempts} reports={reports} label={bLabel} cfg={cfg} now={now} teams={teams} />
           <select value={lang} onChange={(e) => translateAll((e.target as HTMLSelectElement).value)}>
             <option value="">Labels: English</option><option>Spanish</option><option>French</option><option>Haitian Creole</option><option>Yoruba</option><option>Hausa</option><option>Igbo</option><option>Arabic</option>
           </select>
         </div>
+        <RoutePlan plan={plan} label={stopLabel} />
         {!cfg.cloudEnabled && <p class="error">Cloud is switched off by the coordinator (Remote Config). Everything else keeps working.</p>}
         {showPayload && <pre class="payload">{JSON.stringify(cloudRequest(cloudPayload, teams, cfg.incidentType).request, null, 2)}</pre>}
         {err && <p class="error">{err}</p>}

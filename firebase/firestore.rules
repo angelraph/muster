@@ -47,6 +47,39 @@ service cloud.firestore {
         allow delete: if isCoordinator(incident); // merges
       }
 
+      // Door-hanger codes. Knowing the code is the capability: a resident may look up only that one code.
+      match /attempts/{token} {
+        allow get: if signedIn();
+        allow list: if isMember(incident);
+        allow create: if isMember(incident)
+          && request.resource.data.keys().hasOnly(['token', 'buildingId', 'at', 'by'])
+          && request.resource.data.token == token
+          && request.resource.data.buildingId is string && request.resource.data.buildingId.size() <= 40
+          && request.resource.data.at is int;
+      }
+
+      // Resident self-reports from a door-hanger. Created once, never edited. No free text can be stored.
+      match /selfReports/{token} {
+        allow read: if isMember(incident);
+        allow create: if signedIn()
+          && exists(/databases/$(database)/documents/incidents/$(incident)/attempts/$(token))
+          && request.resource.data.keys().hasOnly(['token', 'buildingId', 'status', 'needs', 'people', 'at'])
+          && request.resource.data.token == token
+          && request.resource.data.buildingId == get(/databases/$(database)/documents/incidents/$(incident)/attempts/$(token)).data.buildingId
+          && request.resource.data.status in ['ok', 'need']
+          && request.resource.data.needs is list && request.resource.data.needs.size() <= 10
+          && request.resource.data.people is int && request.resource.data.people >= 0 && request.resource.data.people <= 30
+          && request.resource.data.at is int;
+      }
+
+      // At-risk registry from the agency: building + risk category only. Names and phones in the source file never leave the coordinator's browser.
+      match /registry/{buildingId} {
+        allow read: if isMember(incident);
+        allow write: if isCoordinator(incident)
+          && (request.method == 'delete' || (request.resource.data.keys().hasOnly(['buildingId', 'risks', 'importedAt'])
+          && request.resource.data.risks is list && request.resource.data.risks.size() <= 6));
+      }
+
       match /runs/{id} {
         allow read: if isMember(incident);
         allow create: if isCoordinator(incident);

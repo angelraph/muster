@@ -87,3 +87,98 @@ export function onConfigChange(cb: () => void): () => void {
   channel.addEventListener('message', onMsg);
   return () => channel.removeEventListener('message', onMsg);
 }
+
+// ===== Door-hanger attempts and resident self-reports =====
+// "No answer" is never treated as safe: the volunteer leaves a door-hanger with a one-time code,
+// and the resident can report later from any phone, whenever they get signal.
+export interface Attempt { token: string; buildingId: string; at: number; by: string }
+export type SelfStatus = 'ok' | 'need';
+export interface SelfReport { token: string; buildingId: string; status: SelfStatus; needs: string[]; people: number; at: number }
+
+const ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+export function newToken(): string {
+  const b = crypto.getRandomValues(new Uint8Array(8));
+  return [...b].map((x) => ALPHABET[x % ALPHABET.length]).join('');
+}
+
+function localList<T>(key: string): T[] { try { return JSON.parse(localStorage.getItem(key) ?? '[]'); } catch { return []; } }
+function localSubscribe<T>(key: string, cb: (l: T[]) => void): () => void {
+  cb(localList<T>(key));
+  const onMsg = (e: MessageEvent) => { if (e.data?.type === key) cb(localList<T>(key)); };
+  channel.addEventListener('message', onMsg);
+  const onStorage = (e: StorageEvent) => { if (e.key === key) cb(localList<T>(key)); };
+  addEventListener('storage', onStorage);
+  return () => { channel.removeEventListener('message', onMsg); removeEventListener('storage', onStorage); };
+}
+function localPush<T extends { token: string }>(key: string, item: T) {
+  localStorage.setItem(key, JSON.stringify([...localList<T>(key).filter((x) => x.token !== item.token), item]));
+  channel.postMessage({ type: key });
+}
+
+const ATT_KEY = `muster.attempts.${INCIDENT_ID}`;
+const SELF_KEY = `muster.self.${INCIDENT_ID}`;
+
+export async function recordAttempt(buildingId: string): Promise<Attempt> {
+  const a: Attempt = { token: newToken(), buildingId, at: Date.now(), by: await volunteerId() };
+  const f = firebase();
+  if (f) void setDoc(doc(f.db, 'incidents', INCIDENT_ID, 'attempts', a.token), a); // queues offline
+  else localPush(ATT_KEY, a);
+  return a;
+}
+
+export function subscribeAttempts(cb: (l: Attempt[]) => void): () => void {
+  const f = firebase();
+  if (f) return onSnapshot(collection(f.db, 'incidents', INCIDENT_ID, 'attempts'), (s) => cb(s.docs.map((d) => d.data() as Attempt)), () => cb([]));
+  return localSubscribe<Attempt>(ATT_KEY, cb);
+}
+
+export function subscribeSelfReports(cb: (l: SelfReport[]) => void): () => void {
+  const f = firebase();
+  if (f) return onSnapshot(collection(f.db, 'incidents', INCIDENT_ID, 'selfReports'), (s) => cb(s.docs.map((d) => d.data() as SelfReport)), () => cb([]));
+  return localSubscribe<SelfReport>(SELF_KEY, cb);
+}
+
+/** Resident side. No join code, no account beyond an anonymous session, no free text. */
+export async function submitSelfReport(r: Omit<SelfReport, 'buildingId' | 'at'>): Promise<void> {
+  const f = firebase();
+  if (!f) {
+    const att = localList<Attempt>(ATT_KEY).find((a) => a.token === r.token);
+    if (!att) throw new Error('That code was not found.');
+    localPush(SELF_KEY, { ...r, buildingId: att.buildingId, at: Date.now() });
+    return;
+  }
+  await f.uid;
+  const att = await getDoc(doc(f.db, 'incidents', INCIDENT_ID, 'attempts', r.token));
+  if (!att.exists()) throw new Error('That code was not found. Check it, or try again once the volunteer phone has synced.');
+  const buildingId = att.data().buildingId as string; // rules re-check this against the code
+  await setDoc(doc(f.db, 'incidents', INCIDENT_ID, 'selfReports', r.token), { ...r, buildingId, at: Date.now() });
+}
+
+// ===== Agency at-risk registry (emPOWER-style) =====
+// Parsed in the coordinator's browser. Only building + risk category syncs; the source file never leaves the device.
+export interface RegistryEntry { buildingId: string; risks: string[]; importedAt: number }
+const REG_KEY = `muster.registry.${INCIDENT_ID}`;
+
+export function subscribeRegistry(cb: (l: RegistryEntry[]) => void): () => void {
+  const f = firebase();
+  if (f) return onSnapshot(collection(f.db, 'incidents', INCIDENT_ID, 'registry'), (s) => cb(s.docs.map((d) => d.data() as RegistryEntry)), () => cb([]));
+  const read = () => { try { return JSON.parse(localStorage.getItem(REG_KEY) ?? '[]') as RegistryEntry[]; } catch { return []; } };
+  cb(read());
+  const onMsg = (e: MessageEvent) => { if (e.data?.type === REG_KEY) cb(read()); };
+  channel.addEventListener('message', onMsg);
+  return () => channel.removeEventListener('message', onMsg);
+}
+
+export async function saveRegistry(entries: RegistryEntry[]): Promise<void> {
+  const f = firebase();
+  if (f) { await Promise.all(entries.map((e) => setDoc(doc(f.db, 'incidents', INCIDENT_ID, 'registry', e.buildingId), e))); return; }
+  localStorage.setItem(REG_KEY, JSON.stringify(entries));
+  channel.postMessage({ type: REG_KEY });
+}
+
+export async function clearRegistry(ids: string[]): Promise<void> {
+  const f = firebase();
+  if (f) { await Promise.all(ids.map((id) => deleteDoc(doc(f.db, 'incidents', INCIDENT_ID, 'registry', id)))); return; }
+  localStorage.removeItem(REG_KEY);
+  channel.postMessage({ type: REG_KEY });
+}

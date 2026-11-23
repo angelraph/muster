@@ -4,8 +4,9 @@ import { assess, formatLeft } from '../core/rules';
 import { demoBuildings } from '../core/seed';
 import { EMPTY_EXTRACTION, type Extraction, type Household } from '../core/types';
 import { listen, localSpeechState, installLocalSpeech, type SpeechState } from '../speech';
-import { INCIDENT_ID, keepPrivateNote, saveHousehold, volunteerId } from '../store';
-import { Chip, INCIDENT_LABEL, PRIORITY_TEXT, SourceChip, useHouseholds, useLiveConfig, useNow, useOnline } from './common';
+import { INCIDENT_ID, keepPrivateNote, recordAttempt, saveHousehold, volunteerId, type Attempt } from '../store';
+import { Chip, INCIDENT_LABEL, PRIORITY_TEXT, RISK_LABEL, SourceChip, useAttempts, useHouseholds, useLiveConfig, useNow, useOnline, useRegistry } from './common';
+import { DoorHanger } from './DoorHanger';
 import { askKeys, IntakeForm } from './IntakeForm';
 import { Handoff } from './Handoff';
 
@@ -34,6 +35,10 @@ export function Volunteer() {
   const [lastSaved, setLastSaved] = useState<Household | null>(null);
   const [showHandoff, setShowHandoff] = useState(false);
   const [synced, setSynced] = useState(false);
+  const attempts = useAttempts();
+  const registry = useRegistry();
+  const [hanger, setHanger] = useState<{ attempt: Attempt; label: string } | null>(null);
+  const riskOf = (id: string) => registry.find((r) => r.buildingId === id)?.risks ?? [];
 
   useEffect(() => { deviceModelState().then(setModel); localSpeechState().then(setSpeech); volunteerId().then(setMe); }, []);
 
@@ -100,7 +105,14 @@ export function Volunteer() {
     if (note) keepPrivateNote(h.id, note); // stays in this browser only
     const { synced: s } = saveHousehold(h);
     setSynced(false); s.then(setSynced);
+    try { navigator.vibrate?.([40, 60, 40]); } catch { /* no haptics */ }
     setLastSaved(h); setStep('saved');
+  }
+
+  async function noAnswer() {
+    if (!building) return;
+    const attempt = await recordAttempt(building);
+    setHanger({ attempt, label: buildingLabel(building) });
   }
 
   function reset(next: Step = 'pick') {
@@ -152,9 +164,16 @@ export function Volunteer() {
             </div>)}
           <h2>Which door?</h2>
           <div class="doors">
-            {BUILDINGS.map((b) => {
+            {[...BUILDINGS].sort((x, y) => Number(riskOf(y.id).length > 0 && !all.some((h) => h.buildingId === y.id)) - Number(riskOf(x.id).length > 0 && !all.some((h) => h.buildingId === x.id))).map((b) => {
               const visited = all.some((h) => h.buildingId === b.id);
-              return <button class={`door ${visited ? 'visited' : ''}`} key={b.id} onClick={() => { setBuilding(b.id); setStep(aiReady ? 'capture' : 'confirm'); }}>{b.label}</button>;
+              const tried = !visited && attempts.some((a) => a.buildingId === b.id);
+              const risks = riskOf(b.id);
+              return (
+                <button class={`door ${visited ? 'visited' : ''} ${tried ? 'attempted' : ''} ${risks.length && !visited ? 'known' : ''}`} key={b.id} onClick={() => { setBuilding(b.id); setStep(aiReady ? 'capture' : 'confirm'); }}>
+                  {b.label}
+                  {risks.length > 0 && !visited && <span class="dmark">Known risk: {risks.map((r) => RISK_LABEL[r] ?? r).join(', ')}</span>}
+                  {tried && <span class="dmark">No answer, hanger left</span>}
+                </button>);
             })}
           </div>
           <div class="actions">
@@ -180,6 +199,7 @@ export function Volunteer() {
           <div class="actions">
             <button class="btn primary" disabled={!!busy || (!note && !photo)} onClick={readOnDevice}>{busy || 'Read on this device'}</button>
             <button class="btn ghost" onClick={() => { setSource('tap'); setStep('confirm'); }}>Tap instead</button>
+            {building && <button class="btn ghost" onClick={noAnswer}>Nobody answered</button>}
             <button class="btn ghost" onClick={() => reset()}>Back</button>
           </div>
           <p class="small muted">Voice is offered only when this browser can recognise speech on the device. The note and photo never leave this device.</p>
@@ -201,6 +221,7 @@ export function Volunteer() {
           <IntakeForm value={draft} onChange={setDraft} incident={cfg.incidentType} highlight={asks} />
           <div class="actions sticky">
             <button class="btn primary" onClick={save}>Save household</button>
+            {building && <button class="btn ghost" onClick={noAnswer}>Nobody answered</button>}
             <button class="btn ghost" onClick={() => reset()}>Cancel</button>
           </div>
         </section>)}
@@ -214,6 +235,7 @@ export function Volunteer() {
         </section>)}
 
       {showHandoff && <Handoff mine={mine} onClose={() => setShowHandoff(false)} />}
+      {hanger && <DoorHanger attempt={hanger.attempt} label={hanger.label} onClose={() => { setHanger(null); reset(); }} />}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 // Who goes where, in which order: decided by code, not by the model.
 import type { CloudHousehold } from './payload';
 
-export interface TeamPlan { team: string; zones: string[]; stops: CloudHousehold[] }
+export interface TeamPlan { team: string; zones: string[]; stops: (CloudHousehold & { etaMin?: number; slackMin?: number | null; late?: boolean })[] }
 
 const RANK: Record<string, number> = { P1: 1, P2: 2, P3: 3 };
 const urgency = (h: CloudHousehold) => [h.overdue ? 0 : 1, RANK[h.priority] ?? 9, h.hoursLeft ?? 1e6];

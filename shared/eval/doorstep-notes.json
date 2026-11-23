@@ -1,0 +1,325 @@
+{
+ "$comment": "Synthetic doorstep notes with hand-labelled ground truth. Fields not listed equal the empty record (numbers -1, yes/no 'unknown', deviceType 'none', needs []). Used to measure extraction accuracy on-device vs cloud. No real people.",
+ "notes": [
+  {
+   "id": "n01",
+   "note": "Grandma on oxygen, concentrator dead, spare battery maybe three hours. Baby 8 months, formula for half a day. No clean water.",
+   "truth": {
+    "over65": 1,
+    "infantsUnder1": 1,
+    "deviceType": "oxygen_concentrator",
+    "devicePower": "none",
+    "deviceBatteryHours": 3,
+    "infantFormulaDaysLeft": 0.5,
+    "needs": [
+     "water",
+     "power",
+     "baby_supplies"
+    ]
+   }
+  },
+  {
+   "id": "n02",
+   "note": "Older man, lives alone, no AC, says he's fine but it's very hot inside. Water for two days.",
+   "truth": {
+    "over65": 1,
+    "livesAlone": "yes",
+    "hasCooling": "no",
+    "waterDaysLeft": 2
+   }
+  },
+  {
+   "id": "n03",
+   "note": "Two adults and two kids. Everyone ok. They have water for a week and a generator.",
+   "truth": {
+    "adults": 2,
+    "children": 2,
+    "waterDaysLeft": 7
+   }
+  },
+  {
+   "id": "n04",
+   "note": "Woman on home dialysis, last session was yesterday morning, machine needs power. Power's out.",
+   "truth": {
+    "adults": 1,
+    "dialysis": "yes",
+    "dialysisLastSessionHoursAgo": 24,
+    "needs": [
+     "power"
+    ]
+   }
+  },
+  {
+   "id": "n05",
+   "note": "Diabetic teenager, insulin in a fridge that's been off since Tuesday, about 3 days of pens left.",
+   "truth": {
+    "children": 1,
+    "insulin": "yes",
+    "insulinRefrigerated": "no",
+    "insulinSupplyDays": 3
+   }
+  },
+  {
+   "id": "n06",
+   "note": "Elderly couple, husband uses a walker and can't do stairs, they're on the second floor and the water is rising. Want to leave.",
+   "truth": {
+    "over65": 2,
+    "mobilityLimited": "yes",
+    "needs": [
+     "evacuation",
+     "mobility_help"
+    ]
+   }
+  },
+  {
+   "id": "n07",
+   "note": "Nobody home I think, curtains closed, no answer.",
+   "truth": {}
+  },
+  {
+   "id": "n08",
+   "note": "Man with CPAP, power ok here, he's got enough food. Lives with his son.",
+   "truth": {
+    "adults": 2,
+    "livesAlone": "no",
+    "deviceType": "cpap",
+    "devicePower": "ok"
+   }
+  },
+  {
+   "id": "n09",
+   "note": "Mother, newborn twins, out of formula tomorrow. No car.",
+   "truth": {
+    "adults": 1,
+    "infantsUnder1": 2,
+    "infantFormulaDaysLeft": 1,
+    "needs": [
+     "baby_supplies"
+    ]
+   }
+  },
+  {
+   "id": "n10",
+   "note": "Ventilator patient, 72, battery backup 6 hours, family running a small generator but low on fuel.",
+   "truth": {
+    "over65": 1,
+    "deviceType": "ventilator",
+    "devicePower": "none",
+    "deviceBatteryHours": 6,
+    "needs": [
+     "power"
+    ]
+   }
+  },
+  {
+   "id": "n11",
+   "note": "Three adults, one is 80 and bedbound. Medicine running out, need a pharmacy run.",
+   "truth": {
+    "adults": 2,
+    "over65": 1,
+    "mobilityLimited": "yes",
+    "needs": [
+     "medication"
+    ]
+   }
+  },
+  {
+   "id": "n12",
+   "note": "She uses oxygen but I didn't ask if it's working. Lives alone. Seventy something.",
+   "truth": {
+    "over65": 1,
+    "livesAlone": "yes",
+    "deviceType": "oxygen_concentrator",
+    "devicePower": "unknown"
+   }
+  },
+  {
+   "id": "n13",
+   "note": "Family of five, kids 3, 6 and 10. No water at all since last night.",
+   "truth": {
+    "adults": 2,
+    "children": 3,
+    "waterDaysLeft": 0,
+    "needs": [
+     "water"
+    ]
+   }
+  },
+  {
+   "id": "n14",
+   "note": "Dialysis three times a week, missed Monday's session, it's Wednesday. Needs a ride to the clinic.",
+   "truth": {
+    "dialysis": "yes",
+    "dialysisLastSessionHoursAgo": 96,
+    "needs": [
+     "medical_transport"
+    ]
+   }
+  },
+  {
+   "id": "n15",
+   "note": "Insulin's fine, they have a cooler with ice, two weeks of supply.",
+   "truth": {
+    "insulin": "yes",
+    "insulinRefrigerated": "yes",
+    "insulinSupplyDays": 14
+   }
+  },
+  {
+   "id": "n16",
+   "note": "Oxygen tanks only, not a machine, about a day left in the tanks. Old lady with her daughter.",
+   "truth": {
+    "adults": 1,
+    "over65": 1,
+    "livesAlone": "no",
+    "deviceType": "none",
+    "needs": [
+     "medication"
+    ]
+   }
+  },
+  {
+   "id": "n17",
+   "note": "Heat's bad. 68-year-old, alone, fan works because power came back.",
+   "truth": {
+    "over65": 1,
+    "livesAlone": "yes",
+    "hasCooling": "yes"
+   }
+  },
+  {
+   "id": "n18",
+   "note": "Suction machine for a disabled son, no power, battery died an hour ago.",
+   "truth": {
+    "children": 1,
+    "deviceType": "suction",
+    "devicePower": "none",
+    "deviceBatteryHours": 0,
+    "mobilityLimited": "yes",
+    "needs": [
+     "power"
+    ]
+   }
+  },
+  {
+   "id": "n19",
+   "note": "Young couple, fine, just want to know where the shelter is. Water for 3 days.",
+   "truth": {
+    "adults": 2,
+    "waterDaysLeft": 3,
+    "needs": [
+     "shelter"
+    ]
+   }
+  },
+  {
+   "id": "n20",
+   "note": "Grandpa in a wheelchair, house flooded downstairs, they need to get out and somewhere to sleep.",
+   "truth": {
+    "over65": 1,
+    "mobilityLimited": "yes",
+    "needs": [
+     "evacuation",
+     "shelter",
+     "mobility_help"
+    ]
+   }
+  },
+  {
+   "id": "n21",
+   "note": "Two women in their 80s, sisters, no AC, very hot, one is dizzy. Some water.",
+   "truth": {
+    "over65": 2,
+    "livesAlone": "no",
+    "hasCooling": "no"
+   }
+  },
+  {
+   "id": "n22",
+   "note": "Baby 4 months, formula for about two days, mum's ok. Toilet doesn't work.",
+   "truth": {
+    "adults": 1,
+    "infantsUnder1": 1,
+    "infantFormulaDaysLeft": 2,
+    "needs": [
+     "sanitation"
+    ]
+   }
+  },
+  {
+   "id": "n23",
+   "note": "Concentrator plugged into a car battery inverter, says maybe 2 hours on it. Lives alone, 77.",
+   "truth": {
+    "over65": 1,
+    "livesAlone": "yes",
+    "deviceType": "oxygen_concentrator",
+    "devicePower": "none",
+    "deviceBatteryHours": 2,
+    "needs": [
+     "power"
+    ]
+   }
+  },
+  {
+   "id": "n24",
+   "note": "Didn't get much: older man, wouldn't open the door fully, said he's ok.",
+   "truth": {
+    "over65": 1
+   }
+  },
+  {
+   "id": "n25",
+   "note": "Four adults, food for a day, water for a day, no medical issues.",
+   "truth": {
+    "adults": 4,
+    "waterDaysLeft": 1
+   }
+  },
+  {
+   "id": "n26",
+   "note": "Type 2 diabetic on insulin, fridge works on generator, a week of insulin. Lives alone, 70.",
+   "truth": {
+    "over65": 1,
+    "livesAlone": "yes",
+    "insulin": "yes",
+    "insulinRefrigerated": "yes",
+    "insulinSupplyDays": 7
+   }
+  },
+  {
+   "id": "n27",
+   "note": "Kidney dialysis, not sure when last session was, patient sleeping, wife answered.",
+   "truth": {
+    "adults": 2,
+    "dialysis": "yes"
+   }
+  },
+  {
+   "id": "n28",
+   "note": "Man about 50 with a CPAP, power out, he says he can manage a night without it.",
+   "truth": {
+    "adults": 1,
+    "deviceType": "cpap",
+    "devicePower": "none"
+   }
+  },
+  {
+   "id": "n29",
+   "note": "Three kids alone, parents went to get supplies this morning, no water.",
+   "truth": {
+    "children": 3,
+    "waterDaysLeft": 0,
+    "needs": [
+     "water"
+    ]
+   }
+  },
+  {
+   "id": "n30",
+   "note": "Retired couple, both fine, generator running, plenty of water and food, offered to help neighbours.",
+   "truth": {
+    "over65": 2
+   }
+  }
+ ]
+}

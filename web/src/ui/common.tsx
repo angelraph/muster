@@ -54,3 +54,10 @@ export function SourceChip({ source }: { source: string | undefined }) {
 export const INCIDENT_LABEL: Record<string, string> = {
   flood: 'Flood', hurricane: 'Hurricane', heat_wave: 'Heat wave', earthquake: 'Earthquake', wildfire: 'Wildfire',
 };
+
+import { subscribeAttempts, subscribeRegistry, subscribeSelfReports, type Attempt, type RegistryEntry, type SelfReport } from '../store';
+export function useAttempts(): Attempt[] { const [l, s] = useState<Attempt[]>([]); useEffect(() => subscribeAttempts(s), []); return l; }
+export function useSelfReports(): SelfReport[] { const [l, s] = useState<SelfReport[]>([]); useEffect(() => subscribeSelfReports(s), []); return l; }
+export function useRegistry(): RegistryEntry[] { const [l, s] = useState<RegistryEntry[]>([]); useEffect(() => subscribeRegistry(s), []); return l; }
+
+export const RISK_LABEL: Record<string, string> = { oxygen: 'Oxygen', ventilator: 'Ventilator', dialysis: 'Dialysis', mobility: 'Mobility', insulin: 'Insulin', other: 'Powered device' };

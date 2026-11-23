@@ -12,6 +12,9 @@ import { Logo } from './site/brand';
 import { Icon } from './site/icons';
 import { useRevealAll } from './site/motion';
 import { useOnline } from './ui/common';
+import { LedgerPill } from './ui/Ledger';
+import { ResidentReport } from './ui/DoorHanger';
+import { EvalPage } from './ui/Eval';
 import './styles.css';
 import './site/site.css';
 
@@ -35,7 +38,7 @@ const SITE: Record<string, [string, () => preact.JSX.Element]> = {
   '/judges': ['For judges · Muster', JudgesPage],
   '/about': ['About & credits · Muster', AboutPage],
 };
-const APP: Record<string, string> = { '/volunteer': 'Doors · Muster', '/board': 'Coordinator · Muster' };
+const APP: Record<string, string> = { '/volunteer': 'Doors · Muster', '/board': 'Coordinator · Muster', '/eval': 'Accuracy test · Muster' };
 
 function Site({ route }: { route: string }) {
   const entry = SITE[route];
@@ -82,17 +85,20 @@ function AppShell({ route }: { route: string }) {
   const online = useOnline();
   const [role, setRole] = useState<string>('…');
   const [loaded, setLoaded] = useState(false);
+  const [field, setField] = useState<string>(() => { try { return localStorage.getItem('muster.field') ?? 'off'; } catch { return 'off'; } });
+  const cycleField = () => { const n = field === 'off' ? 'field' : field === 'field' ? 'night' : 'off'; setField(n); try { localStorage.setItem('muster.field', n); } catch { /* ignore */ } };
   useEffect(() => { membership().then(setRole); }, []);
   useEffect(() => { document.title = APP[route]; }, [route]);
   if (role === '…') return <main class="join"><span class="muted">Loading…</span></main>;
   if (role === 'none') return <JoinGate onJoined={() => membership().then(setRole)} />;
   return (
-    <div class="app">
+    <div class={`app ${field !== 'off' ? 'field' : ''} ${field === 'night' ? 'night' : ''}`}>
       <header class="appbar">
         <a href="#/" class="appbar-brand" aria-label="Muster website"><Logo size={28} /></a>
         <nav class="appbar-tabs" aria-label="App">
           <a href="#/volunteer" class={route === '/volunteer' ? 'on' : ''}><Icon name="door" size={18} /> <span>Doors</span></a>
           <a href="#/board" class={route === '/board' ? 'on' : ''}><Icon name="map" size={18} /> <span>Coordinator</span></a>
+          <a href="#/eval" class={route === '/eval' ? 'on' : ''}><Icon name="check" size={18} /> <span>Accuracy</span></a>
         </nav>
         <div class="appbar-right">
           {route === '/board' && (
@@ -100,18 +106,23 @@ function AppShell({ route }: { route: string }) {
               onClick={async () => { for (const h of demoScenario(Date.now(), INCIDENT_ID)) await saveHousehold(h); setLoaded(true); }}>
               {loaded ? 'Demo loaded' : 'Load demo households'}
             </button>)}
+          <button class={`fieldbtn ${field}`} onClick={cycleField} title="Field mode: big targets for gloves, then red night mode" aria-label={`Display mode: ${field}`}>
+            <Icon name={field === 'night' ? 'eyeOff' : 'sliders'} size={16} /> <span class="hide-sm">{field === 'off' ? 'Field mode' : field === 'field' ? 'Field' : 'Night'}</span>
+          </button>
+          <LedgerPill />
           <span class={`net ${online ? 'on' : 'off'}`}><i />{online ? 'Online' : 'Offline'}</span>
           {role === 'coordinator' && <span class="role">Coordinator</span>}
           <span class="net hide-sm" title={firebase() ? 'Connected to Firebase' : 'Demo mode, Firebase not configured'}>{firebase() ? INCIDENT_ID : 'Demo mode'}</span>
         </div>
       </header>
-      {route === '/volunteer' ? <Volunteer /> : <Board />}
+      {route === '/volunteer' ? <Volunteer /> : route === '/eval' ? <EvalPage /> : <Board />}
     </div>
   );
 }
 
 function App() {
   const r = useRoute();
+  if (r === '/r' || r.startsWith('/r/')) return <ResidentReport token={r.slice(3)} />;
   return r in APP ? <AppShell route={r} /> : <Site route={r} />;
 }
 
