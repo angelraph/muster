@@ -80,6 +80,57 @@ class Repo(private val ctx: Context) {
             .addOnCompleteListener { onSynced(it.isSuccessful) }
     }
 
+    // ---------- door-hanger attempts, resident check-ins, agency registry (same collections as the web app) ----------
+    data class Attempt(val token: String, val buildingId: String, val at: Long)
+    data class Registry(val buildingId: String, val risks: List<String>)
+
+    private val ALPHA = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"
+    fun newToken(): String { val r = java.security.SecureRandom(); return (1..8).map { ALPHA[r.nextInt(ALPHA.length)] }.joinToString("") }
+
+    suspend fun recordAttempt(buildingId: String): Attempt {
+        val a = Attempt(newToken(), buildingId, System.currentTimeMillis())
+        if (firebaseOn) Firebase.firestore.collection("incidents").document(incidentId).collection("attempts").document(a.token)
+            .set(mapOf("token" to a.token, "buildingId" to a.buildingId, "at" to a.at, "by" to volunteerId())) // queues offline
+        return a
+    }
+
+    fun attempts(): Flow<List<Attempt>> = if (!firebaseOn) MutableStateFlow(emptyList()) else callbackFlow {
+        val reg = Firebase.firestore.collection("incidents").document(incidentId).collection("attempts")
+            .addSnapshotListener { snap, _ -> if (snap != null) trySend(snap.documents.mapNotNull { d ->
+                runCatching { Attempt(d.getString("token")!!, d.getString("buildingId")!!, (d.get("at") as Number).toLong()) }.getOrNull() }) }
+        awaitClose { reg.remove() }
+    }
+
+    fun selfReported(): Flow<Set<String>> = if (!firebaseOn) MutableStateFlow(emptySet()) else callbackFlow {
+        val reg = Firebase.firestore.collection("incidents").document(incidentId).collection("selfReports")
+            .addSnapshotListener { snap, _ -> if (snap != null) trySend(snap.documents.mapNotNull { it.getString("buildingId") }.toSet()) }
+        awaitClose { reg.remove() }
+    }
+
+    fun registry(): Flow<List<Registry>> = if (!firebaseOn) MutableStateFlow(emptyList()) else callbackFlow {
+        val reg = Firebase.firestore.collection("incidents").document(incidentId).collection("registry")
+            .addSnapshotListener { snap, _ -> if (snap != null) trySend(snap.documents.mapNotNull { d ->
+                @Suppress("UNCHECKED_CAST") runCatching { Registry(d.getString("buildingId")!!, (d.get("risks") as List<String>)) }.getOrNull() }) }
+        awaitClose { reg.remove() }
+    }
+
+    // ---------- Inference Ledger: every AI call on this phone, stored only on this phone ----------
+    data class LedgerEntry(val at: Long, val task: String, val mode: String, val source: String, val ms: Long, val bytesUp: Long, val reason: String)
+    val ledger = MutableStateFlow(loadLedger())
+    fun logCall(e: LedgerEntry) {
+        ledger.value = (listOf(e) + ledger.value).take(300)
+        val arr = org.json.JSONArray(ledger.value.map { org.json.JSONObject(mapOf("at" to it.at, "task" to it.task, "mode" to it.mode, "source" to it.source, "ms" to it.ms, "bytesUp" to it.bytesUp, "reason" to it.reason)) })
+        prefs.edit().putString("ledger", arr.toString()).apply()
+    }
+    private fun loadLedger(): List<LedgerEntry> = runCatching {
+        val a = org.json.JSONArray(prefs.getString("ledger", "[]"))
+        (0 until a.length()).map { i -> a.getJSONObject(i).let { LedgerEntry(it.getLong("at"), it.getString("task"), it.getString("mode"), it.getString("source"), it.getLong("ms"), it.getLong("bytesUp"), it.getString("reason")) } }
+    }.getOrDefault(emptyList())
+
+    var fieldMode: String
+        get() = prefs.getString("fieldMode", "off") ?: "off"
+        set(v) { prefs.edit().putString("fieldMode", v).apply() }
+
     // Doorstep notes never sync: kept only in this app's private storage.
     fun keepPrivateNote(id: String, note: String) = prefs.edit().putString("private.$id", note).apply()
 

@@ -28,6 +28,11 @@ class MusterViewModel(app: Application) : AndroidViewModel(app) {
     val me = MutableStateFlow("")
     val role = MutableStateFlow("…")
     val speechOnDevice = Speech.available(app)
+    val attempts = repo.attempts().stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val selfReported = repo.selfReported().stateIn(viewModelScope, SharingStarted.Eagerly, emptySet())
+    val registry = repo.registry().stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val fieldMode = MutableStateFlow(repo.fieldMode)
+    fun cycleFieldMode() { val n = when (fieldMode.value) { "off" -> "field"; "field" -> "night"; else -> "off" }; fieldMode.value = n; repo.fieldMode = n }
 
     init {
         viewModelScope.launch {
