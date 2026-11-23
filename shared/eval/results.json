@@ -909,6 +909,534 @@
      ]
     }
    ]
+  },
+  {
+   "label": "On-device \u00b7 Gemini Nano (Chrome) \u00b7 prompt v2",
+   "model": "gemini-nano (Chrome built-in)",
+   "prompt": "v2",
+   "hardware": "Intel i5-7300U, 2 cores, 16 GB RAM, Intel HD 620",
+   "where": "device",
+   "at": 1795455355306,
+   "scores": [
+    {
+     "id": "n01",
+     "fieldAcc": 0.7916666666666666,
+     "stated": 7,
+     "statedAcc": 0.75,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "over65",
+      "livesAlone",
+      "dialysis",
+      "needs"
+     ]
+    },
+    {
+     "id": "n02",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 4,
+     "statedAcc": 0.75,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "dialysis",
+      "hasCooling",
+      "needs"
+     ]
+    },
+    {
+     "id": "n03",
+     "fieldAcc": 0.8888888888888888,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "devicePower",
+      "needs"
+     ]
+    },
+    {
+     "id": "n04",
+     "fieldAcc": 0.8055555555555556,
+     "stated": 4,
+     "statedAcc": 0.625,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "livesAlone",
+      "devicePower",
+      "needs"
+     ]
+    },
+    {
+     "id": "n05",
+     "fieldAcc": 0.7222222222222222,
+     "stated": 4,
+     "statedAcc": 0.5,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "devicePower",
+      "insulinRefrigerated",
+      "needs"
+     ]
+    },
+    {
+     "id": "n06",
+     "fieldAcc": 0.6851851851851852,
+     "stated": 3,
+     "statedAcc": 0.7777777777777778,
+     "priorityOk": false,
+     "unsafeMiss": false,
+     "wantPriority": "P2",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "livesAlone",
+      "deviceType",
+      "devicePower",
+      "dialysis",
+      "needs"
+     ]
+    },
+    {
+     "id": "n07",
+     "fieldAcc": 0.8333333333333334,
+     "stated": 0,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "livesAlone",
+      "devicePower",
+      "needs"
+     ]
+    },
+    {
+     "id": "n08",
+     "fieldAcc": 0.8333333333333334,
+     "stated": 4,
+     "statedAcc": 0.5,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "livesAlone",
+      "needs"
+     ]
+    },
+    {
+     "id": "n09",
+     "fieldAcc": 0.6666666666666666,
+     "stated": 4,
+     "statedAcc": 0,
+     "priorityOk": false,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "infantsUnder1",
+      "deviceType",
+      "devicePower",
+      "infantFormulaDaysLeft",
+      "needs"
+     ]
+    },
+    {
+     "id": "n10",
+     "fieldAcc": 0.8611111111111112,
+     "stated": 5,
+     "statedAcc": 0.9,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "livesAlone",
+      "needs"
+     ]
+    },
+    {
+     "id": "n11",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 4,
+     "statedAcc": 0.75,
+     "priorityOk": false,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "devicePower",
+      "dialysis",
+      "dialysisLastSessionHoursAgo"
+     ]
+    },
+    {
+     "id": "n12",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 4,
+     "statedAcc": 0.5,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "livesAlone",
+      "devicePower",
+      "needs"
+     ]
+    },
+    {
+     "id": "n13",
+     "fieldAcc": 0.75,
+     "stated": 4,
+     "statedAcc": 0.375,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "deviceType",
+      "devicePower",
+      "waterDaysLeft",
+      "needs"
+     ]
+    },
+    {
+     "id": "n14",
+     "fieldAcc": 0.8055555555555556,
+     "stated": 3,
+     "statedAcc": 0.5,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "deviceType",
+      "devicePower",
+      "dialysisLastSessionHoursAgo",
+      "needs"
+     ]
+    },
+    {
+     "id": "n15",
+     "fieldAcc": 0.7222222222222222,
+     "stated": 3,
+     "statedAcc": 0.3333333333333333,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "devicePower",
+      "insulinRefrigerated",
+      "insulinSupplyDays",
+      "hasCooling",
+      "needs"
+     ]
+    },
+    {
+     "id": "n16",
+     "fieldAcc": 0.8055555555555556,
+     "stated": 5,
+     "statedAcc": 0.5,
+     "priorityOk": false,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P1",
+     "wrong": [
+      "livesAlone",
+      "deviceType",
+      "devicePower",
+      "needs"
+     ]
+    },
+    {
+     "id": "n17",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": false,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "deviceType",
+      "devicePower",
+      "needs"
+     ]
+    },
+    {
+     "id": "n18",
+     "fieldAcc": 0.6944444444444444,
+     "stated": 6,
+     "statedAcc": 0.5833333333333334,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "children",
+      "livesAlone",
+      "deviceBatteryHours",
+      "dialysis",
+      "needs"
+     ]
+    },
+    {
+     "id": "n19",
+     "fieldAcc": 0.8611111111111112,
+     "stated": 3,
+     "statedAcc": 0.5,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "livesAlone",
+      "needs"
+     ]
+    },
+    {
+     "id": "n20",
+     "fieldAcc": 0.8703703703703703,
+     "stated": 3,
+     "statedAcc": 0.5555555555555555,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P2",
+     "gotPriority": "P2",
+     "wrong": [
+      "over65",
+      "livesAlone",
+      "needs"
+     ]
+    },
+    {
+     "id": "n21",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 3,
+     "statedAcc": 0.6666666666666666,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "livesAlone",
+      "dialysis",
+      "needs"
+     ]
+    },
+    {
+     "id": "n22",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 4,
+     "statedAcc": 0,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "infantsUnder1",
+      "infantFormulaDaysLeft",
+      "needs"
+     ]
+    },
+    {
+     "id": "n23",
+     "fieldAcc": 0.8333333333333334,
+     "stated": 6,
+     "statedAcc": 0.6666666666666666,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "deviceBatteryHours",
+      "needs"
+     ]
+    },
+    {
+     "id": "n24",
+     "fieldAcc": 0.8333333333333334,
+     "stated": 1,
+     "statedAcc": 0,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "over65",
+      "devicePower",
+      "needs"
+     ]
+    },
+    {
+     "id": "n25",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 2,
+     "statedAcc": 0.5,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "devicePower",
+      "dialysis",
+      "waterDaysLeft",
+      "needs"
+     ]
+    },
+    {
+     "id": "n26",
+     "fieldAcc": 0.8333333333333334,
+     "stated": 5,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "devicePower",
+      "needs"
+     ]
+    },
+    {
+     "id": "n27",
+     "fieldAcc": 0.7222222222222222,
+     "stated": 2,
+     "statedAcc": 0.5,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "livesAlone",
+      "devicePower",
+      "dialysisLastSessionHoursAgo",
+      "needs"
+     ]
+    },
+    {
+     "id": "n28",
+     "fieldAcc": 0.8888888888888888,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "livesAlone",
+      "needs"
+     ]
+    },
+    {
+     "id": "n29",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 3,
+     "statedAcc": 0.6666666666666666,
+     "priorityOk": false,
+     "unsafeMiss": true,
+     "wantPriority": "P1",
+     "gotPriority": "P3",
+     "wrong": [
+      "livesAlone",
+      "devicePower",
+      "dialysis",
+      "waterDaysLeft"
+     ]
+    },
+    {
+     "id": "n30",
+     "fieldAcc": 0.8333333333333334,
+     "stated": 1,
+     "statedAcc": 0,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "over65",
+      "devicePower",
+      "needs"
+     ]
+    }
+   ],
+   "ms": [
+    115669,
+    63943,
+    58847,
+    60328,
+    65115,
+    62180,
+    58280,
+    62961,
+    57677,
+    55741,
+    53780,
+    65788,
+    60252,
+    64133,
+    60523,
+    62767,
+    60537,
+    58590,
+    56622,
+    56734,
+    48190,
+    36030,
+    41338,
+    36022,
+    36522,
+    38387,
+    41682,
+    53283,
+    38463,
+    41068
+   ],
+   "errors": 0,
+   "summary": {
+    "n": 30,
+    "fieldAcc": 0.7921296296296295,
+    "statedAcc": 0.5800000000000001,
+    "priorityAgree": 0.8,
+    "unsafeMisses": 1,
+    "avgMs": 55715
+   }
   }
  ]
 }
