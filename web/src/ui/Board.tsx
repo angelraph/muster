@@ -14,8 +14,19 @@ import { Chip, INCIDENT_LABEL, PRIORITY_TEXT, SourceChip, useAttempts, useHouseh
 import { membership } from '../store';
 import { useEffect } from 'preact/hooks';
 import { DEFAULT_ROUTE } from '../core/route';
+import { NEIGHBOURHOOD as HOOD } from '../core/seed';
 
 const BUILDINGS = demoBuildings();
+// One label per street, placed at the middle point of its longest segment.
+const STREET_LABELS = (() => {
+  const best = new Map<string, { name: string; x: number; y: number; n: number }>();
+  for (const st of HOOD.streets) {
+    const m = st.pts[Math.floor(st.pts.length / 2)];
+    if (!m || m[0] < 10 || m[0] > 690 || m[1] < 10 || m[1] > 450) continue;
+    if ((best.get(st.name)?.n ?? 0) < st.pts.length) best.set(st.name, { name: st.name, x: m[0], y: m[1], n: st.pts.length });
+  }
+  return [...best.values()];
+})();
 const byId = new Map(BUILDINGS.map((b) => [b.id, b]));
 const RANK = { P1: 1, P2: 2, P3: 3 } as const;
 
@@ -98,6 +109,8 @@ export function Board() {
         <ConfigSwitches cfg={cfg} onRefresh={refreshCfg} />
       </header>
 
+      {list.some((h) => h.reportedBy.startsWith('vol-')) && (
+        <p class="demo-note">Demo residents are synthetic (made up for rehearsal). The map, streets and addresses are real: {HOOD.name}, from OpenStreetMap. Real records replace these as volunteers report.</p>)}
       <div class="kpis">
         <Kpi n={list.length} label="households found" />
         <Kpi n={p1} label="urgent" kind="P1" />
@@ -110,24 +123,27 @@ export function Board() {
 
       <div class="grid2">
         <div class="card">
-          <h3>Map <span class="muted small">grey glow = unchecked · red outline = known risk · amber dashes = no answer · dotted lines = team routes</span></h3>
-          <svg viewBox="0 0 700 460" class="map" role="img" aria-label="Neighbourhood map">
-            {['River Rd', 'Mill St', 'Church Ln', 'Market St', 'Hill Ave', 'Bridge St'].map((s, i) => (
-              <g key={s}><line x1="30" x2="680" y1={50 + i * 70} y2={50 + i * 70} class="street" />
-                <text x="30" y={40 + i * 70} class="streetname">{s}</text></g>))}
-            <circle cx={DEFAULT_ROUTE.depot.x} cy={DEFAULT_ROUTE.depot.y} r="7" class="depot" /><text x={DEFAULT_ROUTE.depot.x + 10} y={DEFAULT_ROUTE.depot.y + 4} class="depot-t">Shelter</text>
+          <h3>{HOOD.name} <span class="muted small">real streets & buildings · grey glow = unchecked · red ring = known risk · amber = no answer · dotted = team routes</span></h3>
+          <svg viewBox="0 0 700 460" class="map" role="img" aria-label={`Map of ${HOOD.name}`}>
+            {HOOD.river.map((r, i) => <polyline key={`r${i}`} class="river" points={r.map((p) => p.join(',')).join(' ')} />)}
+            {HOOD.streets.map((st, i) => <polyline key={`s${i}`} class="street" points={st.pts.map((p) => p.join(',')).join(' ')} />)}
+            {STREET_LABELS.map((l) => <text key={l.name} x={l.x} y={l.y} class="streetname">{l.name}</text>)}
+            {BUILDINGS.map((b) => b.poly && <polygon key={`f${b.id}`} class="footprint" points={b.poly.map((p) => p.join(',')).join(' ')} />)}
             {plan.map((t, i) => (
               <polyline key={t.team} class="route-line" stroke={TEAM_COLORS[i % TEAM_COLORS.length]}
                 points={[DEFAULT_ROUTE.depot, ...t.stops.map((st) => (st.building ? byId.get(st.building) : undefined)).filter(Boolean) as { x: number; y: number }[]].map((p) => `${p.x},${p.y}`).join(' ')} />))}
+            <g class="depot-g"><rect x={DEFAULT_ROUTE.depot.x - 7} y={DEFAULT_ROUTE.depot.y - 7} width="14" height="14" rx="3" class="depot" />
+              <text x={DEFAULT_ROUTE.depot.x + 11} y={DEFAULT_ROUTE.depot.y + 4} class="depot-t">{HOOD.staging?.name ?? 'Staging point'}</text></g>
             {BUILDINGS.map((b) => {
               const s = status(b.id);
               return (
                 <g key={b.id} class={`bld ${s.cls} ${selected === b.id ? 'sel' : ''}`} onClick={() => setSelected(b.id)}>
-                  <rect x={b.x - 12} y={b.y - 12} width="24" height="24" rx="4" />
-                  {s.a?.deadline != null && <text x={b.x} y={b.y + 28} class="clock">{formatLeft(s.a.deadline - now).replace('overdue ', '-')}</text>}
+                  <circle cx={b.x} cy={b.y} r="7" class="dot" />
+                  {s.a?.deadline != null && <text x={b.x} y={b.y - 11} class="clock">{formatLeft(s.a.deadline - now).replace('overdue ', '-')}</text>}
                   <title>{b.label}</title>
                 </g>);
             })}
+            <text x="694" y="454" class="attrib" text-anchor="end">{HOOD.name} · map {HOOD.attribution}</text>
           </svg>
         </div>
 

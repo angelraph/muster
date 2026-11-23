@@ -31,7 +31,7 @@ export function Landing() {
 function Hero() {
   const [i] = useCycle(5, 2800);
   const cards = [
-    <div class="stack-photo"><Photo p={PHOTOS.rescue} eager /><span class="stack-cap"><Icon name="pin" size={14} /> Riverside · flood, day 2</span></div>,
+    <div class="stack-photo"><Photo p={PHOTOS.rescue} eager /><span class="stack-cap"><Icon name="pin" size={14} /> Marshall, NC · flood, day 2</span></div>,
     <HouseholdCard />,
     <NoSignalCard />,
     <div class="stack-photo"><Photo p={PHOTOS.alone} eager /><span class="stack-cap"><Icon name="clock" size={14} /> Lives alone · unchecked 26 h</span></div>,
@@ -114,7 +114,7 @@ function ProductFrame() {
             <div class="fv fv-door">
               <div class="fv-col">
                 <h3>Which door?</h3>
-                <div class="fv-doors">{['2 River Rd', '4 River Rd', '6 River Rd', '8 River Rd', '10 River Rd', '3 Mill St', '5 Mill St', '7 Mill St', '11 Mill St'].map((d, k) => <span class={k === 3 ? 'sel' : k < 2 ? 'done' : ''} key={d}>{d}</span>)}</div>
+                <div class="fv-doors">{['44 Hill Street', '100 Hill Street', '129 Hill Street', '137 Hill Street', '141 Hill Street', '201 Hill Street', '229 Hill Street', '257 Hill Street', '297 Hill Street'].map((d, k) => <span class={k === 3 ? 'sel' : k < 2 ? 'done' : ''} key={d}>{d}</span>)}</div>
                 <p class="fv-dim">Dashed doors: nobody has checked them yet.</p>
               </div>
               <NoSignalCard />
@@ -123,9 +123,9 @@ function ProductFrame() {
             <div class="fv fv-board">
               <MiniBoard />
               <div class="fv-list">
-                <HouseholdCard tone="overdue" street="8 River Rd" note="tapped" hazard="Oxygen, power unknown" source="tap" />
-                <HouseholdCard street="11 Mill St" note="flat 3" hazard="Dialysis session due" startMs={3 * 3600e3} source="tap" />
-                <HouseholdCard tone="soon" street="16 Church Ln" note="yellow house" hazard="Baby formula running out" startMs={11 * 3600e3} />
+                <HouseholdCard tone="overdue" street="Hill Street" note="tapped" hazard="Oxygen, power unknown" source="tap" />
+                <HouseholdCard street="North Main Street" note="upstairs" hazard="Dialysis session due" startMs={3 * 3600e3} source="tap" />
+                <HouseholdCard tone="soon" street="Skyway Drive" note="end house" hazard="Baby formula running out" startMs={11 * 3600e3} />
               </div>
             </div>)}
           {t === 2 && (
@@ -256,7 +256,7 @@ function FieldTiles() {
     <section class="sec">
       <div class="sec-head reveal"><div><h2>Built for the people at the door.</h2><p class="sec-lead">Cheap phones, gloves, rain, darkness, no signal. Large tap targets, a tap form for phones without AI, and honest banners.</p></div></div>
       <div class="tiles">
-        <div class="tile t-wide reveal"><Photo p={PHOTOS.street} /><div class="tile-ui"><HouseholdCard street="12 Hill Ave" note="blue door, 2F" hazard="Oxygen: power status unknown" tone="urgent" source="tap" /></div><span class="cursor c1">Volunteer 2</span></div>
+        <div class="tile t-wide reveal"><Photo p={PHOTOS.street} /><div class="tile-ui"><HouseholdCard street="South Main Street" note="blue door" hazard="Oxygen: power status unknown" tone="urgent" source="tap" /></div><span class="cursor c1">Volunteer 2</span></div>
         <div class="tile reveal"><Photo p={PHOTOS.volunteers} /><div class="tile-ui sm"><div class="mk-pill"><Icon name="check" size={14} /> Synced 7 households</div></div></div>
         <div class="tile reveal"><Photo p={PHOTOS.hands} /><div class="tile-ui sm"><div class="mk-pill red"><Icon name="clock" size={14} /> Recheck due now</div></div><span class="cursor c2">Coordinator</span></div>
         <div class="tile reveal"><Photo p={PHOTOS.team} /><div class="tile-ui sm"><div class="mk-pill violet"><Icon name="cloud" size={14} /> Run sheets ready</div></div></div>

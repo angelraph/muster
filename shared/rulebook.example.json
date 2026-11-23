@@ -1,6 +1,6 @@
 {
   "version": "example-2026.11",
-  "label": "EXAMPLE VALUES - every threshold here must be set by the responding agency. Not medical advice.",
+  "label": "EXAMPLE VALUES drawn from public guidance (see sources). Every threshold must be confirmed by the responding agency. Not medical advice.",
   "priority": {
     "p1WithinHours": 6,
     "p2WithinHours": 24
@@ -23,11 +23,22 @@
     "unrefrigeratedDaysInHeat": 7
   },
   "heat": {
-    "incidentTypes": ["heat_wave"],
+    "incidentTypes": [
+      "heat_wave"
+    ],
     "minAgeBand": "over65",
     "recheckHours": 6
   },
   "supplies": {
     "warnBelowDays": 1
+  },
+  "sources": {
+    "dialysis.maxHoursBetweenSessions": "US in-centre haemodialysis runs 3 sessions a week; the long ~2-day gap (68-72 h) is when deaths and admissions rise. Foley RN et al., 'Long interdialytic interval and mortality among patients receiving hemodialysis', NEJM 2011;365:1099-1107.",
+    "insulin.unrefrigeratedDays": "FDA: insulin may be kept unrefrigerated (59-86°F / 15-30°C) for up to 28 days. FDA, 'Information Regarding Insulin Storage and Switching Between Products in an Emergency'.",
+    "insulin.unrefrigeratedDaysInHeat": "FDA notes insulin exposed to extreme heat loses potency faster. 7 days is a conservative agency choice, not an FDA number.",
+    "poweredDevice.assumedBatteryHoursWhenUnknown": "Fail-safe design choice: unknown battery time is treated as 0 h, so the household is never assumed safe.",
+    "heat.minAgeBand": "CDC: adults 65+ and people living alone without air conditioning are at highest risk in extreme heat. In the 2021 Pacific Northwest heat dome, 71% of those who died in Multnomah County lived alone (Multnomah County, 'Health impacts from excessive heat events', 2021).",
+    "supplies.warnBelowDays": "FEMA (Ready.gov) recommends 1 gallon of water per person per day for at least 3 days. Muster flags under 1 day as time-critical; agencies can raise this to 3.",
+    "priority.p1WithinHours": "Agency choice: households whose time-to-harm is under this many hours are Urgent."
   }
 }

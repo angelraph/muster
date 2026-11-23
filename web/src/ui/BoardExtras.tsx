@@ -72,13 +72,13 @@ export function buildRegistry(text: string, buildings: Building[]): Preview {
 }
 
 export const SAMPLE_REGISTRY = `address,full_name,phone,date_of_birth,equipment,notes
-8 River Rd,(example) Resident A,555-0101,1941-03-02,Oxygen concentrator,lives with daughter
-14 River Rd,(example) Resident B,555-0102,1938-11-19,Home dialysis,
-5 Mill St,(example) Resident C,555-0103,1950-07-07,Ventilator (BiPAP),
-8 Church Ln,(example) Resident D,555-0104,1944-01-28,Wheelchair; bed-bound,
-17 Market St,(example) Resident E,555-0105,1959-05-15,Insulin (type 1),fridge needed
-6 Hill Ave,(example) Resident F,555-0106,1936-09-09,Oxygen concentrator + CPAP,
-99 Nowhere Rd,(example) Resident G,555-0107,1940-02-02,Oxygen,not in this area
+324 Baileys Branch Road,EXAMPLE ONLY - not a real resident,555-0101,1941-03-02,Oxygen concentrator,fictional row
+229 Hill Street,EXAMPLE ONLY - not a real resident,555-0102,1938-11-19,Home dialysis,fictional row
+76 North Main Street,EXAMPLE ONLY - not a real resident,555-0103,1950-07-07,Ventilator (BiPAP),fictional row
+145 Skyway Drive,EXAMPLE ONLY - not a real resident,555-0104,1944-01-28,Wheelchair; bed-bound,fictional row
+39 South Main Street,EXAMPLE ONLY - not a real resident,555-0105,1959-05-15,Insulin (type 1),fictional row
+75 Sprinkle Drive,EXAMPLE ONLY - not a real resident,555-0106,1936-09-09,Oxygen concentrator + CPAP,fictional row
+1 Nowhere Lane,EXAMPLE ONLY - not a real resident,555-0107,1940-02-02,Oxygen,outside the area
 `;
 
 export function RegistryCard({ buildings, registry, canWrite }: { buildings: Building[]; registry: RegistryEntry[]; canWrite: boolean }) {

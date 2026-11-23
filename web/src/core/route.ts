@@ -2,16 +2,21 @@
 // Greedy earliest-deadline-first with travel time: at each step go to the stop whose clock is tightest
 // once you count the drive there; overdue first, unknown-but-critical next.
 import type { CloudHousehold } from './payload';
+import { NEIGHBOURHOOD } from './seed';
 
 export interface Point { x: number; y: number }
 export interface RoutedStop extends CloudHousehold { etaMin: number; slackMin: number | null; late: boolean }
-export interface RouteParams { metresPerUnit: number; kmh: number; serviceMin: number; depot: Point }
+export interface RouteParams { metresPerUnit: number; kmh: number; serviceMin: number; depot: Point; detour: number }
 
-/** Demo map: 64 map units between neighbouring houses ≈ 90 m. Trucks crawl at 12 km/h through flood debris. */
-export const DEFAULT_ROUTE: RouteParams = { metresPerUnit: 1.4, kmh: 12, serviceMin: 8, depot: { x: 20, y: 230 } };
+/** Real map scale from the OpenStreetMap extract. Straight-line distance x1.35 approximates winding mountain roads;
+ *  12 km/h is a cautious truck speed through flood debris; 8 min per stop. All three are agency-adjustable assumptions. */
+export const DEFAULT_ROUTE: RouteParams = {
+  metresPerUnit: NEIGHBOURHOOD.metresPerUnit, kmh: 12, serviceMin: 8, detour: 1.35,
+  depot: NEIGHBOURHOOD.staging ? { x: NEIGHBOURHOOD.staging.x, y: NEIGHBOURHOOD.staging.y } : { x: 20, y: 230 },
+};
 
 const travelMin = (a: Point, b: Point, p: RouteParams) =>
-  (Math.hypot(a.x - b.x, a.y - b.y) * p.metresPerUnit) / ((p.kmh * 1000) / 60);
+  (Math.hypot(a.x - b.x, a.y - b.y) * p.metresPerUnit * p.detour) / ((p.kmh * 1000) / 60);
 
 export function routeStops(stops: CloudHousehold[], coord: (buildingId: string | null) => Point | null, p: RouteParams = DEFAULT_ROUTE): RoutedStop[] {
   const left = [...stops];

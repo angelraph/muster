@@ -123,13 +123,17 @@ label { color: var(--muted); }
 @media (max-width: 1000px) { .grid2 { grid-template-columns: 1fr; } }
 .scroll { max-height: 560px; overflow: auto; }
 .map { width: 100%; height: auto; }
-.street { stroke: #16213a; stroke-width: 16; stroke-linecap: round; } .streetname { fill: var(--muted); font-size: 11px; font-weight: 600; }
-.bld rect { fill: #1f2937; stroke: #475569; cursor: pointer; transition: fill .3s; }
-.bld.unvisited rect { fill: #334155; stroke: #cbd5e1; animation: bglow 2.4s infinite; }
+.street { fill: none; stroke: #22304d; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; } .streetname { fill: var(--muted); font-size: 9px; font-weight: 600; paint-order: stroke; stroke: var(--bg); stroke-width: 3px; pointer-events: none; }
+.river { fill: none; stroke: #0e4a73; stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; opacity: .8; }
+.footprint { fill: #2a3754; stroke: #3c4b6b; stroke-width: .6; }
+.attrib { fill: var(--muted); font-size: 8px; opacity: .8; }
+.depot-g .depot { fill: #fff; } 
+.bld .dot { fill: #1f2937; stroke: #475569; cursor: pointer; transition: fill .3s; }
+.bld.unvisited .dot { fill: #334155; stroke: #cbd5e1; animation: bglow 2.4s infinite; }
 @keyframes bglow { 50% { stroke-opacity: .25; fill-opacity: .6; } }
-.bld.P1 rect { fill: var(--p1); stroke: none; } .bld.P2 rect { fill: var(--p2); stroke: none; } .bld.P3 rect { fill: var(--p3); stroke: none; }
-.bld.overdue rect { fill: var(--over); animation: pulse 1s infinite; }
-.bld.sel rect { stroke: #fff; stroke-width: 3; }
+.bld.P1 .dot { fill: var(--p1); stroke: none; } .bld.P2 .dot { fill: var(--p2); stroke: none; } .bld.P3 .dot { fill: var(--p3); stroke: none; }
+.bld.overdue .dot { fill: var(--over); animation: pulse 1s infinite; }
+.bld.sel .dot { stroke: #fff; stroke-width: 3; }
 .clock { fill: var(--text); font-size: 10px; text-anchor: middle; font-weight: 700; }
 .hh { padding: 14px; border-radius: 16px; border: 1px solid var(--line); margin-bottom: 10px; border-left-width: 5px; cursor: pointer; background: rgba(255, 255, 255, .015); transition: background .2s; }
 .hh:hover { background: rgba(255, 255, 255, .04); }
@@ -184,10 +188,10 @@ label { color: var(--muted); }
 .door.known { box-shadow: inset 4px 0 0 var(--over); }
 .door .dmark { display: block; font-size: 11px; font-weight: 700; margin-top: 2px; }
 .door.attempted .dmark { color: #fbbf24; } .door.known .dmark { color: #fda4af; }
-.bld.attempted rect { fill: #422006; stroke: #f59e0b; stroke-dasharray: 3 2; }
-.bld.selfok rect { fill: #14532d; stroke: #22c55e; }
-.bld.selfneed rect { fill: var(--over); animation: pulse 1s infinite; }
-.bld.known.unvisited rect { fill: #4c0519; stroke: var(--over); }
+.bld.attempted .dot { fill: #422006; stroke: #f59e0b; stroke-dasharray: 3 2; }
+.bld.selfok .dot { fill: #14532d; stroke: #22c55e; }
+.bld.selfneed .dot { fill: var(--over); animation: pulse 1s infinite; }
+.bld.known.unvisited .dot { fill: #4c0519; stroke: var(--over); }
 .selfrep { display: flex; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
 .selfrep:last-child { border-bottom: 0; }
 
@@ -237,8 +241,10 @@ label { color: var(--muted); }
 .app.night .mk-src, .app.night .chip, .app.night .ledger-pill, .app.night .net, .app.night .role { background: #2a0606 !important; color: #ff9a9a !important; border-color: #5c1414 !important; }
 .app.night .card.warn { background: #160303; border-color: #5c1414; } .app.night .banner.ok { background: #160303; border-color: #5c1414; }
 .app.night .door.visited { background: #1a0505; border-color: #7f1d1d; }
-.app.night .bld.unvisited rect { stroke: #ff6b6b; fill: #2a0606; }
+.app.night .bld.unvisited .dot { stroke: #ff6b6b; fill: #2a0606; }
 .eval-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; } @media (max-width: 900px) { .eval-grid { grid-template-columns: 1fr; } }
 .eval-k { grid-template-columns: repeat(2, 1fr) !important; } .kpi .n small { font-size: 14px; color: var(--muted); }
 .eval-t { min-width: 0; font-size: 13px; } .eval-t td, .eval-t th { padding: 8px 10px; } .eval-t tr.late td { color: #fda4af; }
 details summary { cursor: pointer; color: var(--brand-2); margin: 8px 0; }
+
+.demo-note { margin: 0 0 10px; padding: 8px 12px; border-radius: 12px; font-size: 13px; color: #fde68a; background: rgba(250,204,21,.08); border: 1px solid rgba(250,204,21,.3); }

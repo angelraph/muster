@@ -10,7 +10,7 @@ function fmt(ms: number) {
 }
 
 /** A household card whose countdown really ticks. */
-export function HouseholdCard({ street = '8 River Rd', note = 'green gate, ground floor', hazard = 'Oxygen concentrator without power', startMs = 2 * 3600e3 + 58 * 60e3, tone = 'urgent', source = 'device' }:
+export function HouseholdCard({ street = 'Hill Street', note = 'blue door', hazard = 'Oxygen concentrator without power', startMs = 2 * 3600e3 + 58 * 60e3, tone = 'urgent', source = 'device' }:
   { street?: string; note?: string; hazard?: string; startMs?: number; tone?: 'urgent' | 'soon' | 'overdue'; source?: 'device' | 'tap' | 'cloud' }) {
   const [left, setLeft] = useState(startMs);
   useEffect(() => { if (reducedMotion()) return; const t = setInterval(() => setLeft((l) => (l > 1000 ? l - 1000 : startMs)), 1000); return () => clearInterval(t); }, []);
@@ -83,11 +83,11 @@ export function RunSheetCard() {
   return (
     <div class="mk-sheet">
       <div class="mk-sheet-h"><b>Team 1 run sheet</b><span class="mk-src cloud">Cloud</span></div>
-      <p>Start with the oxygen cases on River Rd. Bring a generator and water.</p>
+      <p>Start with the oxygen cases on Hill Street. Bring a generator and water.</p>
       <ol>
-        <li><b>8 River Rd</b> · oxygen, about 2 h left</li>
-        <li><b>11 Mill St</b> · dialysis due, needs a ride</li>
-        <li><b>16 Church Ln</b> · formula and water low</li>
+        <li><b>Hill Street</b> · oxygen, about 2 h left</li>
+        <li><b>North Main Street</b> · dialysis due, needs a ride</li>
+        <li><b>Skyway Drive</b> · formula and water low</li>
       </ol>
     </div>
   );

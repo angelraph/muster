@@ -1,24 +1,18 @@
-// Synthetic demo neighbourhood: every known building, so unvisited homes can be shown.
-// In a real incident this list would come from an address or building-footprint import.
+// The neighbourhood: real buildings, addresses, streets and river for Marshall, NC (OpenStreetMap, ODbL).
+// The households placed on it in demo mode are synthetic; the geography is not.
+import hood from '../../../shared/neighbourhood.json';
 import type { Building } from './payload';
 
-const STREETS = ['River Rd', 'Mill St', 'Church Ln', 'Market St', 'Hill Ave', 'Bridge St'];
-
-export function demoBuildings(): Building[] {
-  const out: Building[] = [];
-  STREETS.forEach((street, row) => {
-    for (let i = 0; i < 10; i++) {
-      const n = (i + 1) * 2 + (row % 2);
-      out.push({
-        id: `B${row}${String(i).padStart(2, '0')}`,
-        zone: `Z${row * 2 + Math.floor(i / 5) + 1}`,
-        x: 60 + i * 64,
-        y: 50 + row * 70,
-        label: `${n} ${street}`,
-      });
-    }
-  });
-  return out;
+export interface Neighbourhood {
+  name: string; attribution: string; viewBox: [number, number]; metresPerUnit: number;
+  staging: { name: string; x: number; y: number; lat: number; lon: number } | null;
+  buildings: (Building & { lat: number; lon: number; kind: string; osmId: number; poly: [number, number][] })[];
+  streets: { name: string; pts: [number, number][] }[];
+  river: [number, number][][];
 }
 
-export const DEMO_STREETS = STREETS;
+export const NEIGHBOURHOOD = hood as unknown as Neighbourhood;
+
+export function demoBuildings(): Building[] {
+  return NEIGHBOURHOOD.buildings;
+}

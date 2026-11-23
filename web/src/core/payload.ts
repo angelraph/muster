@@ -19,7 +19,7 @@ export interface CloudHousehold {
   visits: number;
 }
 
-export interface Building { id: string; zone: string; x: number; y: number; label: string }
+export interface Building { id: string; zone: string; x: number; y: number; label: string; poly?: [number, number][]; lat?: number; lon?: number }
 
 const round1 = (n: number) => Math.round(n * 10) / 10;
 

@@ -36,13 +36,5 @@ fun askKeys(v: Extraction): Set<String> = buildSet {
 
 data class Building(val id: String, val zone: String, val label: String)
 
-/** Same synthetic neighbourhood as the web app (web/src/core/seed.ts). */
-fun demoBuildings(): List<Building> {
-    val streets = listOf("River Rd", "Mill St", "Church Ln", "Market St", "Hill Ave", "Bridge St")
-    return streets.flatMapIndexed { row, street ->
-        (0 until 10).map { i ->
-            val n = (i + 1) * 2 + (row % 2)
-            Building("B$row${i.toString().padStart(2, '0')}", "Z${row * 2 + i / 5 + 1}", "$n $street")
-        }
-    }
-}
+/** Real neighbourhood shared with the web app: Marshall, NC (see Neighbourhood.kt, generated from shared/neighbourhood.json). */
+fun demoBuildings(): List<Building> = NEIGHBOURHOOD_BUILDINGS
