@@ -81,6 +81,8 @@ private sealed interface Screen {
 private fun App(vm: MusterViewModel) {
     val role by vm.role.collectAsStateWithLifecycle()
     if (role == "…") { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }; return }
+    var welcomed by remember { mutableStateOf(vm.repo.welcomed) }
+    if (!welcomed) { Welcome { vm.repo.welcomed = true; welcomed = true }; return }
     if (role == "none") { JoinScreen(vm); return }
     var screen by remember { mutableStateOf<Screen>(Screen.Home) }
     val now by produceState(System.currentTimeMillis()) { while (true) { value = System.currentTimeMillis(); delay(1000) } }
@@ -305,6 +307,51 @@ private fun Banner(vm: MusterViewModel) {
             DeviceModel.NO_FIREBASE -> "Demo mode (no Firebase config). Tap mode."
         }, fontSize = 13.sp)
         if (model == DeviceModel.DOWNLOADABLE) TextButton({ vm.installModel() }) { Text(dl ?: "Install on-device AI") }
+    }
+}
+
+/** First launch only: the landing page's story in three swipes, then join. */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+private fun Welcome(onDone: () -> Unit) {
+    val pages = listOf(
+        Triple("Find them before their clock runs out.", "After a disaster, many people die in the days after the storm: the oxygen runs out, the insulin goes warm, someone living alone is never checked.", Ic.home),
+        Triple("Works with every tower down.", "Knock, tap or speak what you see. The phone works out who has the least time. Records sync the moment any phone finds signal, or hop phone to phone by QR.", Ic.wifiOff),
+        Triple("Private by design.", "No names, ever. Notes and photos stay on this phone. The AI never decides who gets help first: the agency's rulebook does, and you confirm every answer.", Ic.shield),
+    )
+    val pager = androidx.compose.foundation.pager.rememberPagerState { pages.size }
+    val scope = rememberCoroutineScope()
+    Column(Modifier.fillMaxSize().systemBarsPadding().padding(24.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Image(androidx.compose.ui.res.painterResource(R.mipmap.ic_launcher_foreground), null, Modifier.size(44.dp))
+            Text("Muster", fontWeight = FontWeight.ExtraBold, fontSize = 22.sp)
+            Spacer(Modifier.weight(1f))
+            TextButton(onDone) { Text("Skip") }
+        }
+        androidx.compose.foundation.pager.HorizontalPager(pager, Modifier.weight(1f)) { i ->
+            val (title, body, icon) = pages[i]
+            Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+                Box(Modifier.size(72.dp).background(if (i == 0) M.brand else if (i == 1) M.over else M.panel2, RoundedCornerShape(22.dp)), contentAlignment = Alignment.Center) {
+                    Glyph(icon, Color.White, 34)
+                }
+                Spacer(Modifier.height(28.dp))
+                Text(title, style = MaterialTheme.typography.headlineMedium)
+                Spacer(Modifier.height(14.dp))
+                Text(body, fontSize = 17.sp, lineHeight = 26.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+        Row(Modifier.fillMaxWidth().padding(vertical = 16.dp), horizontalArrangement = Arrangement.Center) {
+            repeat(pages.size) { i ->
+                Box(Modifier.padding(4.dp).size(width = if (pager.currentPage == i) 22.dp else 8.dp, height = 8.dp)
+                    .background(if (pager.currentPage == i) M.cyan else MaterialTheme.colorScheme.outline, RoundedCornerShape(50)))
+            }
+        }
+        Button({ if (pager.currentPage < pages.size - 1) scope.launch { pager.animateScrollToPage(pager.currentPage + 1) } else onDone() },
+            Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(16.dp)) {
+            Text(if (pager.currentPage < pages.size - 1) "Next" else "Join the response", fontWeight = FontWeight.Bold, fontSize = 17.sp)
+        }
+        Text("Needs intake and logistics only. Not medical advice.", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 10.dp))
     }
 }
 

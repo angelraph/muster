@@ -49,7 +49,7 @@ function Hero() {
       <p class="hero-sub reveal">After a disaster, many people die in the days after the storm: the oxygen runs out, the insulin goes warm, someone living alone is never checked.
         Muster finds those households first, even with every cell tower down.</p>
       <div class="hero-cta reveal">
-        <a class="btn-pill solid lg" href="#/volunteer">Open the volunteer app</a>
+        <a class="btn-pill solid lg" href="#/home">Open the volunteer app</a>
         <a class="btn-pill soft lg" href="#/how">See how it works <Icon name="arrow" size={18} /></a>
       </div>
       <div class="stack reveal" aria-label="Muster screens">
@@ -309,7 +309,7 @@ export function FinalCta() {
     <section class="sec final">
       <h2 class="reveal">Find them before<br />their clock runs out.</h2>
       <p class="sec-lead reveal">Open Muster on any phone or in Chrome. It keeps working when the towers don't.</p>
-      <a class="mega-btn reveal" href="#/volunteer">Open Muster <Icon name="arrowUpRight" size={40} stroke={2} /></a>
+      <a class="mega-btn reveal" href="#/home">Open Muster <Icon name="arrowUpRight" size={40} stroke={2} /></a>
     </section>
   );
 }

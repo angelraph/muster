@@ -36,8 +36,9 @@ Rules:
 - NEVER write a person's name anywhere. "descriptor" is only a way to find the door, e.g. "blue door, 2nd floor".
 - over65 counts people aged 65+. adults counts people 18-64. children counts ages 1-17. infantsUnder1 counts babies under 1.
 - deviceType is a powered medical device in the home (oxygen concentrator, ventilator, CPAP, suction). Oxygen cylinders without power are not powered devices: use "none" and add "medication" to needs.
-- devicePower "none" means the device has no mains power right now. deviceBatteryHours is how long its battery/backup lasts, in hours.
+- devicePower "none" means the device has no mains (grid) power right now. A device running on its own battery, a car battery, an inverter or a generator is devicePower "none", and deviceBatteryHours is how long that backup or fuel will last, in hours (use -1 if not said).
 - Convert durations: "two days" = 2 days, "since yesterday" for dialysis = 24 hours ago, "half a day" = 0.5.
+- dialysisLastSessionHoursAgo is the time since the last session that actually happened. A missed session did not happen: if dialysis is 3 times a week and they "missed Monday" and it is Wednesday, the last session was Friday, about 120 hours ago.
 - needs lists only needs the note mentions.`;
 
 let extractor: GenerativeModel | null = null;

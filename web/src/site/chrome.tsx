@@ -20,7 +20,7 @@ export function SiteNav({ route }: { route: string }) {
         <div class="snav-cta">
           <a class="icon-btn hide-sm" href={GITHUB} target="_blank" rel="noopener" aria-label="Source code on GitHub"><Icon name="github" /></a>
           <a class="btn-pill ghost hide-sm" href="#/board">Coordinator</a>
-          <a class={`btn-pill solid ${scrolled ? '' : 'soft'}`} href="#/volunteer">Open app</a>
+          <a class={`btn-pill solid ${scrolled ? '' : 'soft'}`} href="#/home">Open app</a>
           <button class="icon-btn show-sm" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} onClick={() => setOpen(!open)}>
             <Icon name={open ? 'close' : 'menu'} />
           </button>

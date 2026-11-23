@@ -15,13 +15,14 @@ import { useOnline } from './ui/common';
 import { LedgerPill } from './ui/Ledger';
 import { ResidentReport } from './ui/DoorHanger';
 import { EvalPage } from './ui/Eval';
+import { AppHome } from './ui/AppHome';
 import './styles.css';
 import './site/site.css';
 
 function useRoute() {
-  const [r, setR] = useState(location.hash.slice(1) || '/');
+  const [r, setR] = useState(location.hash.slice(1).split('?')[0] || '/');
   useEffect(() => {
-    const f = () => { setR(location.hash.slice(1) || '/'); scrollTo({ top: 0 }); };
+    const f = () => { setR(location.hash.slice(1).split('?')[0] || '/'); scrollTo({ top: 0 }); };
     addEventListener('hashchange', f); return () => removeEventListener('hashchange', f);
   }, []);
   return r;
@@ -38,7 +39,7 @@ const SITE: Record<string, [string, () => preact.JSX.Element]> = {
   '/judges': ['For judges · Muster', JudgesPage],
   '/about': ['About & credits · Muster', AboutPage],
 };
-const APP: Record<string, string> = { '/volunteer': 'Doors · Muster', '/board': 'Coordinator · Muster', '/eval': 'Accuracy test · Muster' };
+const APP: Record<string, string> = { '/home': 'Home · Muster', '/volunteer': 'Doors · Muster', '/board': 'Coordinator · Muster', '/eval': 'Accuracy test · Muster' };
 
 function Site({ route }: { route: string }) {
   const entry = SITE[route];
@@ -96,6 +97,7 @@ function AppShell({ route }: { route: string }) {
       <header class="appbar">
         <a href="#/" class="appbar-brand" aria-label="Muster website"><Logo size={28} /></a>
         <nav class="appbar-tabs" aria-label="App">
+          <a href="#/home" class={route === '/home' ? 'on' : ''}><Icon name="house" size={18} /> <span>Home</span></a>
           <a href="#/volunteer" class={route === '/volunteer' ? 'on' : ''}><Icon name="door" size={18} /> <span>Doors</span></a>
           <a href="#/board" class={route === '/board' ? 'on' : ''}><Icon name="map" size={18} /> <span>Coordinator</span></a>
           <a href="#/eval" class={route === '/eval' ? 'on' : ''}><Icon name="check" size={18} /> <span>Accuracy</span></a>
@@ -115,7 +117,7 @@ function AppShell({ route }: { route: string }) {
           <span class="net hide-sm" title={firebase() ? 'Connected to Firebase' : 'Demo mode, Firebase not configured'}>{firebase() ? INCIDENT_ID : 'Demo mode'}</span>
         </div>
       </header>
-      {route === '/volunteer' ? <Volunteer /> : route === '/eval' ? <EvalPage /> : <Board />}
+      {route === '/home' ? <AppHome /> : route === '/volunteer' ? <Volunteer /> : route === '/eval' ? <EvalPage /> : <Board />}
     </div>
   );
 }

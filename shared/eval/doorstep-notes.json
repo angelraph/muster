@@ -150,7 +150,7 @@
    "note": "Dialysis three times a week, missed Monday's session, it's Wednesday. Needs a ride to the clinic.",
    "truth": {
     "dialysis": "yes",
-    "dialysisLastSessionHoursAgo": 96,
+    "dialysisLastSessionHoursAgo": 120,
     "needs": [
      "medical_transport"
     ]

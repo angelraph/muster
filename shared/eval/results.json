@@ -1,0 +1,490 @@
+{
+ "$comment": "Published accuracy runs on shared/eval/doorstep-notes.json. Produced by the in-app Accuracy test page; numbers are measured, not estimated.",
+ "runs": [
+  {
+   "label": "Cloud \u00b7 prompt v1",
+   "model": "gemini-3.5-flash-lite",
+   "prompt": "v1",
+   "where": "cloud",
+   "at": 1795418128131,
+   "errors": 0,
+   "summary": {
+    "n": 30,
+    "fieldAcc": 0.8575617283950618,
+    "statedAcc": 0.9088095238095238,
+    "priorityAgree": 0.8666666666666667,
+    "unsafeMisses": 3,
+    "avgMs": 1230
+   },
+   "ms": [
+    1973,
+    1137,
+    1243,
+    1643,
+    1127,
+    1085,
+    1418,
+    1094,
+    1141,
+    1164,
+    1002,
+    1110,
+    1145,
+    1107,
+    1744,
+    1210,
+    1222,
+    1132,
+    1034,
+    1048,
+    1089,
+    939,
+    1126,
+    1051,
+    1273,
+    1098,
+    1925,
+    1204,
+    1365,
+    1043
+   ],
+   "scores": [
+    {
+     "id": "n01",
+     "fieldAcc": 0.9305555555555556,
+     "stated": 7,
+     "statedAcc": 0.9642857142857143,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "waterDaysLeft",
+      "needs"
+     ]
+    },
+    {
+     "id": "n02",
+     "fieldAcc": 0.8333333333333334,
+     "stated": 4,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1"
+     ]
+    },
+    {
+     "id": "n03",
+     "fieldAcc": 1,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": []
+    },
+    {
+     "id": "n04",
+     "fieldAcc": 0.8055555555555556,
+     "stated": 4,
+     "statedAcc": 0.625,
+     "priorityOk": false,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "deviceType",
+      "devicePower",
+      "needs"
+     ]
+    },
+    {
+     "id": "n05",
+     "fieldAcc": 0.8888888888888888,
+     "stated": 4,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "hasCooling",
+      "needs"
+     ]
+    },
+    {
+     "id": "n06",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P2",
+     "gotPriority": "P2",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1",
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n07",
+     "fieldAcc": 0.9444444444444444,
+     "stated": 0,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "deviceType"
+     ]
+    },
+    {
+     "id": "n08",
+     "fieldAcc": 1,
+     "stated": 4,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": []
+    },
+    {
+     "id": "n09",
+     "fieldAcc": 0.8518518518518519,
+     "stated": 4,
+     "statedAcc": 0.8333333333333334,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "children",
+      "livesAlone",
+      "needs"
+     ]
+    },
+    {
+     "id": "n10",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 5,
+     "statedAcc": 0.8,
+     "priorityOk": false,
+     "unsafeMiss": true,
+     "wantPriority": "P1",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1",
+      "devicePower"
+     ]
+    },
+    {
+     "id": "n11",
+     "fieldAcc": 0.8888888888888888,
+     "stated": 4,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "children",
+      "infantsUnder1"
+     ]
+    },
+    {
+     "id": "n12",
+     "fieldAcc": 0.8333333333333334,
+     "stated": 4,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1"
+     ]
+    },
+    {
+     "id": "n13",
+     "fieldAcc": 0.8333333333333334,
+     "stated": 4,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "over65",
+      "infantsUnder1",
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n14",
+     "fieldAcc": 0.9444444444444444,
+     "stated": 3,
+     "statedAcc": 0.6666666666666666,
+     "priorityOk": false,
+     "unsafeMiss": true,
+     "wantPriority": "P1",
+     "gotPriority": "P2",
+     "wrong": [
+      "dialysisLastSessionHoursAgo"
+     ]
+    },
+    {
+     "id": "n15",
+     "fieldAcc": 0.9444444444444444,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "hasCooling"
+     ]
+    },
+    {
+     "id": "n16",
+     "fieldAcc": 1,
+     "stated": 5,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": []
+    },
+    {
+     "id": "n17",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1",
+      "devicePower"
+     ]
+    },
+    {
+     "id": "n18",
+     "fieldAcc": 0.8888888888888888,
+     "stated": 6,
+     "statedAcc": 0.6666666666666666,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "children",
+      "deviceBatteryHours"
+     ]
+    },
+    {
+     "id": "n19",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "over65",
+      "children",
+      "infantsUnder1",
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n20",
+     "fieldAcc": 0.9444444444444444,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P2",
+     "gotPriority": "P2",
+     "wrong": [
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n21",
+     "fieldAcc": 0.7222222222222222,
+     "stated": 3,
+     "statedAcc": 0.6666666666666666,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1",
+      "livesAlone",
+      "needs"
+     ]
+    },
+    {
+     "id": "n22",
+     "fieldAcc": 0.9166666666666666,
+     "stated": 4,
+     "statedAcc": 0.875,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "children",
+      "needs"
+     ]
+    },
+    {
+     "id": "n23",
+     "fieldAcc": 0.7222222222222222,
+     "stated": 6,
+     "statedAcc": 0.6666666666666666,
+     "priorityOk": false,
+     "unsafeMiss": true,
+     "wantPriority": "P1",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1",
+      "devicePower",
+      "needs"
+     ]
+    },
+    {
+     "id": "n24",
+     "fieldAcc": 1,
+     "stated": 1,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": []
+    },
+    {
+     "id": "n25",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 2,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "dialysis",
+      "insulin",
+      "mobilityLimited",
+      "needs"
+     ]
+    },
+    {
+     "id": "n26",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 5,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1",
+      "needs"
+     ]
+    },
+    {
+     "id": "n27",
+     "fieldAcc": 0.9444444444444444,
+     "stated": 2,
+     "statedAcc": 0.5,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults"
+     ]
+    },
+    {
+     "id": "n28",
+     "fieldAcc": 0.7777777777777778,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "over65",
+      "children",
+      "infantsUnder1",
+      "needs"
+     ]
+    },
+    {
+     "id": "n29",
+     "fieldAcc": 0.8333333333333334,
+     "stated": 3,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "infantsUnder1",
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n30",
+     "fieldAcc": 0.6111111111111112,
+     "stated": 1,
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1",
+      "livesAlone",
+      "devicePower",
+      "dialysis",
+      "mobilityLimited"
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -74,7 +74,8 @@ class OnDeviceAi(private val firebaseOn: Boolean) {
 Only record what the note states. If something is not stated use -1 for numbers and "unknown" for yes/no fields. Never guess.
 NEVER write a person's name. "descriptor" is only a way to find the door.
 over65 counts people aged 65+. adults counts 18-64. children counts 1-17. infantsUnder1 counts babies under 1.
-deviceType is a powered medical device (oxygen concentrator, ventilator, CPAP, suction). devicePower "none" means no mains power now; deviceBatteryHours is how long its battery lasts.
-Convert durations: "two days" = 2, "since yesterday" for dialysis = 24 hours ago, "half a day" = 0.5."""
+deviceType is a powered medical device (oxygen concentrator, ventilator, CPAP, suction). devicePower "none" means no mains (grid) power now. A device on its own battery, a car battery, an inverter or a generator is devicePower "none"; deviceBatteryHours is how long that backup or fuel lasts.
+Convert durations: "two days" = 2, "since yesterday" for dialysis = 24 hours ago, "half a day" = 0.5.
+dialysisLastSessionHoursAgo is the time since the last session that actually happened; a missed session did not happen."""
     }
 }

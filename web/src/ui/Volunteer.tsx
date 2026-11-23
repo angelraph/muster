@@ -33,7 +33,7 @@ export function Volunteer() {
   const [error, setError] = useState('');
   const [stopMic, setStopMic] = useState<null | (() => void)>(null);
   const [lastSaved, setLastSaved] = useState<Household | null>(null);
-  const [showHandoff, setShowHandoff] = useState(false);
+  const [showHandoff, setShowHandoff] = useState(() => location.hash.includes('handoff'));
   const [synced, setSynced] = useState(false);
   const attempts = useAttempts();
   const registry = useRegistry();

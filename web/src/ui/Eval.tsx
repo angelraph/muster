@@ -1,6 +1,7 @@
 // Accuracy test: 30 synthetic doorstep notes with hand-labelled answers, run on this device and in the cloud.
 import { useEffect, useState } from 'preact/hooks';
 import data from '../../../shared/eval/doorstep-notes.json';
+import published from '../../../shared/eval/results.json';
 import { deviceModelState, evalExtract, prepareDeviceModel } from '../ai';
 import { scoreNote, summarise, type NoteScore, type Summary } from '../core/eval';
 import type { Extraction } from '../core/types';
@@ -22,9 +23,11 @@ export function EvalPage() {
   const [progress, setProgress] = useState(0);
   const [dev, setDev] = useState('checking');
   const [err, setErr] = useState('');
+  const [showSetup, setShowSetup] = useState(false);
   useEffect(() => { deviceModelState().then(setDev); document.title = 'Accuracy test · Muster'; }, []);
 
   async function run(where: Where) {
+    if (where === 'device' && (dev === 'no-api' || dev === 'unavailable')) { setErr(''); setShowSetup(true); return; }
     setErr(''); setBusy(where); setProgress(0);
     const scores: NoteScore[] = [], ms: number[] = []; let errors = 0;
     try {
@@ -73,6 +76,26 @@ export function EvalPage() {
           <span class="small muted">On-device model here: {dev}</span>
         </div>
         {err && <p class="error">{err}</p>}
+        {(showSetup || dev === 'no-api') && (
+          <div class="setup">
+            <b>This browser does not offer on-device Gemini Nano yet{dev === 'no-api' ? ' (Prompt API not enabled)' : ''}.</b> To run the on-device column, use desktop Chrome on a capable computer:
+            <ol>
+              <li>Open <code>chrome://flags/#prompt-api-for-gemini-nano</code> and choose <b>Enabled</b>.</li>
+              <li>Open <code>chrome://flags/#optimization-guide-on-device-model</code> and choose <b>Enabled BypassPerfRequirement</b>, then relaunch Chrome.</li>
+              <li>Open <code>chrome://components</code>, find <b>Optimization Guide On Device Model</b> and press <b>Check for update</b> (the model is a few GB; it needs plenty of free disk space).</li>
+              <li>Come back here and press <b>Run on this device</b>.</li>
+            </ol>
+            <span class="small muted">The cloud column works in any browser. On phones without Gemini Nano, Muster uses its tap form: that is the honest path for cheap devices.</span>
+          </div>)}
+      </div>
+      <div class="card">
+        <h3>Published runs</h3>
+        <p class="small muted">Measured with this page and saved in the repository (<code>shared/eval/results.json</code>), so anyone can see them.</p>
+        <table class="tbl eval-t"><thead><tr><th>Run</th><th>Stated-field</th><th>Priority agreement</th><th>Unsafe misses</th><th>Avg time</th><th>Date</th></tr></thead>
+          <tbody>{(published.runs as { label: string; at: number; summary: Summary }[]).map((r) => (
+            <tr key={r.label}><td>{r.label}</td><td>{pct(r.summary.statedAcc)}</td><td>{pct(r.summary.priorityAgree)}</td><td>{r.summary.unsafeMisses}</td><td>{r.summary.avgMs} ms</td><td>{new Date(r.at).toLocaleDateString()}</td></tr>))}
+          </tbody>
+        </table>
       </div>
       <div class="eval-grid">
         {cols.map(([w, title]) => {

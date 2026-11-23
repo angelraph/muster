@@ -2,7 +2,7 @@
   "name": "Muster",
   "short_name": "Muster",
   "description": "Find the households a disaster is about to harm, before their time runs out. Works with no signal.",
-  "start_url": "/#/volunteer",
+  "start_url": "/#/home",
   "scope": "/",
   "display": "standalone",
   "background_color": "#060b17",

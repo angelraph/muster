@@ -127,6 +127,10 @@ class Repo(private val ctx: Context) {
         (0 until a.length()).map { i -> a.getJSONObject(i).let { LedgerEntry(it.getLong("at"), it.getString("task"), it.getString("mode"), it.getString("source"), it.getLong("ms"), it.getLong("bytesUp"), it.getString("reason")) } }
     }.getOrDefault(emptyList())
 
+    var welcomed: Boolean
+        get() = prefs.getBoolean("welcomed", false)
+        set(v) { prefs.edit().putBoolean("welcomed", v).apply() }
+
     var fieldMode: String
         get() = prefs.getString("fieldMode", "off") ?: "off"
         set(v) { prefs.edit().putString("fieldMode", v).apply() }

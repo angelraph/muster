@@ -197,7 +197,7 @@ export function JudgesPage() {
       <PageHero eyebrow="For judges" title="Try Muster in five minutes." lead="Everything you need to see hybrid inference working on Web and Android." />
       <Doc>
         <ol class="judge-steps">
-          <li><b>Open the app.</b> <a href="#/volunteer">Volunteer app</a> or <a href="#/board">coordinator board</a>. Join with the demo code provided in the submission.</li>
+          <li><b>Open the app.</b> <a href="#/home">Volunteer app</a> or <a href="#/board">coordinator board</a>. Join with the demo code provided in the submission.</li>
           <li><b>Load synthetic households.</b> On the coordinator board, use "Load demo households" to fill the map.</li>
           <li><b>Generate run sheets.</b> Press "Show exactly what is sent", then "Generate run sheets". The result is labelled <span class="mk-src cloud">Cloud</span>.</li>
           <li><b>Try doorstep intake.</b> In Chrome with on-device AI enabled, type a note and press "Read on this device". The result is labelled <span class="mk-src device">On this device</span>.</li>
@@ -240,7 +240,7 @@ export function NotFound() {
       <span class="nf-code">404</span>
       <h1>This door isn't on the map.</h1>
       <p class="lead">The page you're looking for doesn't exist. Every other door is still being checked.</p>
-      <div class="hero-cta"><a class="btn-pill solid lg" href="#/">Back home</a><a class="btn-pill soft lg" href="#/volunteer">Open the app</a></div>
+      <div class="hero-cta"><a class="btn-pill solid lg" href="#/">Back home</a><a class="btn-pill soft lg" href="#/home">Open the app</a></div>
     </section>
   );
 }
