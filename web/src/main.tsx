@@ -67,7 +67,7 @@ function JoinGate({ onJoined }: { onJoined: () => void }) {
         <h1>Join the response</h1>
         <p class="muted">Incident <b>{INCIDENT_ID}</b>. Ask your coordinator for the join code. You only need signal once.</p>
         <label class="field-l">Join code
-          <input value={code} autoFocus autoCapitalize="characters" onInput={(e) => setCode((e.target as HTMLInputElement).value)} placeholder="e.g. RIVER-2026" />
+          <input value={code} autoFocus autoCapitalize="characters" onInput={(e) => setCode((e.target as HTMLInputElement).value)} placeholder="e.g. ABCD-1234" />
         </label>
         {err && <p class="error">{err}</p>}
         <button class="btn primary block" disabled={busy || !code.trim()}>{busy ? 'Joining…' : 'Join incident'}</button>
@@ -84,6 +84,7 @@ function AppShell({ route }: { route: string }) {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { membership().then(setRole); }, []);
   useEffect(() => { document.title = APP[route]; }, [route]);
+  if (role === '…') return <main class="join"><span class="muted">Loading…</span></main>;
   if (role === 'none') return <JoinGate onJoined={() => membership().then(setRole)} />;
   return (
     <div class="app">
