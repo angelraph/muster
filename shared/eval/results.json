@@ -485,6 +485,430 @@
      ]
     }
    ]
+  },
+  {
+   "label": "Cloud \u00b7 prompt v2",
+   "model": "gemini-3.5-flash-lite",
+   "prompt": "v2",
+   "note": "Prompt v2 adds rules for battery/inverter/generator power and missed dialysis sessions (the three v1 unsafe misses). n14 truth corrected to 120 h before this run.",
+   "where": "cloud",
+   "at": 1795421261300,
+   "errors": 0,
+   "summary": {
+    "n": 30,
+    "fieldAcc": 0.8623456790123458,
+    "statedAcc": 0.937962962962963,
+    "priorityAgree": 0.9666666666666667,
+    "unsafeMisses": 0,
+    "avgMs": 1249
+   },
+   "ms": [
+    2053,
+    1338,
+    1237,
+    1478,
+    1220,
+    1224,
+    1126,
+    1302,
+    1272,
+    1078,
+    1031,
+    1524,
+    1393,
+    1024,
+    1111,
+    1172,
+    1275,
+    1159,
+    1056,
+    1160,
+    1045,
+    1501,
+    1507,
+    1064,
+    1134,
+    1454,
+    1037,
+    1022,
+    1381,
+    1090
+   ],
+   "scores": [
+    {
+     "id": "n01",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "children",
+      "waterDaysLeft"
+     ]
+    },
+    {
+     "id": "n02",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": []
+    },
+    {
+     "id": "n03",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "over65",
+      "infantsUnder1",
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n04",
+     "statedAcc": 0.75,
+     "priorityOk": false,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "deviceType",
+      "devicePower"
+     ]
+    },
+    {
+     "id": "n05",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "infantsUnder1",
+      "hasCooling",
+      "needs"
+     ]
+    },
+    {
+     "id": "n06",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P2",
+     "gotPriority": "P2",
+     "wrong": [
+      "children",
+      "infantsUnder1",
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n07",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "deviceType"
+     ]
+    },
+    {
+     "id": "n08",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": []
+    },
+    {
+     "id": "n09",
+     "statedAcc": 0.875,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "children",
+      "needs"
+     ]
+    },
+    {
+     "id": "n10",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1"
+     ]
+    },
+    {
+     "id": "n11",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "children",
+      "infantsUnder1",
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n12",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1",
+      "needs"
+     ]
+    },
+    {
+     "id": "n13",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "over65",
+      "infantsUnder1",
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n14",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": []
+    },
+    {
+     "id": "n15",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "hasCooling"
+     ]
+    },
+    {
+     "id": "n16",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "children",
+      "infantsUnder1"
+     ]
+    },
+    {
+     "id": "n17",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1"
+     ]
+    },
+    {
+     "id": "n18",
+     "statedAcc": 0.833,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "children"
+     ]
+    },
+    {
+     "id": "n19",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "over65",
+      "children",
+      "infantsUnder1",
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n20",
+     "statedAcc": 0.556,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P2",
+     "gotPriority": "P2",
+     "wrong": [
+      "over65",
+      "needs"
+     ]
+    },
+    {
+     "id": "n21",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "needs"
+     ]
+    },
+    {
+     "id": "n22",
+     "statedAcc": 0.625,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "needs"
+     ]
+    },
+    {
+     "id": "n23",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1"
+     ]
+    },
+    {
+     "id": "n24",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "deviceType"
+     ]
+    },
+    {
+     "id": "n25",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "dialysis",
+      "insulin",
+      "mobilityLimited",
+      "needs"
+     ]
+    },
+    {
+     "id": "n26",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1",
+      "needs"
+     ]
+    },
+    {
+     "id": "n27",
+     "statedAcc": 0.5,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "livesAlone",
+      "needs"
+     ]
+    },
+    {
+     "id": "n28",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "over65",
+      "children",
+      "infantsUnder1",
+      "needs"
+     ]
+    },
+    {
+     "id": "n29",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P1",
+     "gotPriority": "P1",
+     "wrong": [
+      "adults",
+      "over65",
+      "infantsUnder1",
+      "livesAlone"
+     ]
+    },
+    {
+     "id": "n30",
+     "statedAcc": 1,
+     "priorityOk": true,
+     "unsafeMiss": false,
+     "wantPriority": "P3",
+     "gotPriority": "P3",
+     "wrong": [
+      "adults",
+      "children",
+      "infantsUnder1",
+      "livesAlone",
+      "devicePower"
+     ]
+    }
+   ]
   }
  ]
 }
