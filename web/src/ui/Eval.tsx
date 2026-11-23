@@ -31,13 +31,21 @@ export function EvalPage() {
       if (where === 'device' && dev !== 'available') await prepareDeviceModel(() => {});
       for (let i = 0; i < NOTES.length; i++) {
         const n = NOTES[i];
-        try {
-          const r = await evalExtract(n.note, where, cfg.cloudModel);
-          scores.push(scoreNote(n.id, r.data, n.truth, cfg.incidentType, cfg.rulebook)); ms.push(r.ms);
-        } catch (e) {
-          errors++;
-          if (i === 0) throw e;
+        // Free-tier cloud quotas are per minute: pace cloud calls and retry rate-limit errors with backoff.
+        let done = false;
+        for (let attempt = 0; attempt < 4 && !done; attempt++) {
+          try {
+            const r = await evalExtract(n.note, where, cfg.cloudModel);
+            scores.push(scoreNote(n.id, r.data, n.truth, cfg.incidentType, cfg.rulebook)); ms.push(r.ms);
+            done = true;
+          } catch (e) {
+            const msg = String((e as Error).message);
+            if (i === 0 && attempt === 0 && !/429|quota|rate|exhaust/i.test(msg)) throw e;
+            if (attempt < 3) await new Promise((z) => setTimeout(z, 5000 * (attempt + 1)));
+          }
         }
+        if (!done) errors++;
+        if (where === 'cloud') await new Promise((z) => setTimeout(z, 4200));
         setProgress(i + 1);
       }
       const r: Run = { where, at: Date.now(), scores, ms, errors, summary: summarise(scores, ms) };
