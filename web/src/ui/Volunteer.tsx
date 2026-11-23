@@ -9,6 +9,8 @@ import { Chip, INCIDENT_LABEL, PRIORITY_TEXT, RISK_LABEL, SourceChip, useAttempt
 import { DoorHanger } from './DoorHanger';
 import { askKeys, IntakeForm } from './IntakeForm';
 import { Handoff } from './Handoff';
+import { LanguageCard } from './LanguageCard';
+import { applyAnswers } from '../core/language';
 
 const BUILDINGS = demoBuildings();
 
@@ -34,6 +36,7 @@ export function Volunteer() {
   const [stopMic, setStopMic] = useState<null | (() => void)>(null);
   const [lastSaved, setLastSaved] = useState<Household | null>(null);
   const [showHandoff, setShowHandoff] = useState(() => location.hash.includes('handoff'));
+  const [showLang, setShowLang] = useState(false);
   const [synced, setSynced] = useState(false);
   const attempts = useAttempts();
   const registry = useRegistry();
@@ -199,6 +202,7 @@ export function Volunteer() {
           <div class="actions">
             <button class="btn primary" disabled={!!busy || (!note && !photo)} onClick={readOnDevice}>{busy || 'Read on this device'}</button>
             <button class="btn ghost" onClick={() => { setSource('tap'); setStep('confirm'); }}>Tap instead</button>
+            <button class="btn ghost" onClick={() => setShowLang(true)}>Ask in their language</button>
             {building && <button class="btn ghost" onClick={noAnswer}>Nobody answered</button>}
             <button class="btn ghost" onClick={() => reset()}>Back</button>
           </div>
@@ -221,6 +225,7 @@ export function Volunteer() {
           <IntakeForm value={draft} onChange={setDraft} incident={cfg.incidentType} highlight={asks} />
           <div class="actions sticky">
             <button class="btn primary" onClick={save}>Save household</button>
+            <button class="btn ghost" onClick={() => setShowLang(true)}>Ask in their language</button>
             {building && <button class="btn ghost" onClick={noAnswer}>Nobody answered</button>}
             <button class="btn ghost" onClick={() => reset()}>Cancel</button>
           </div>
@@ -234,6 +239,7 @@ export function Volunteer() {
           <button class="btn primary" onClick={() => reset()}>Next door</button>
         </section>)}
 
+      {showLang && <LanguageCard onClose={() => setShowLang(false)} onDone={(a) => { setDraft((d) => applyAnswers(d, a)); if (step !== 'confirm') setSource('tap'); setShowLang(false); setStep('confirm'); }} />}
       {showHandoff && <Handoff mine={mine} onClose={() => setShowHandoff(false)} />}
       {hanger && <DoorHanger attempt={hanger.attempt} label={hanger.label} onClose={() => { setHanger(null); reset(); }} />}
     </div>

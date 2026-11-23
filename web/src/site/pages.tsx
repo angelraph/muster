@@ -197,12 +197,19 @@ export function JudgesPage() {
       <PageHero eyebrow="For judges" title="Try Muster in five minutes." lead="Everything you need to see hybrid inference working on Web and Android." />
       <Doc>
         <ol class="judge-steps">
-          <li><b>Open the app.</b> <a href="#/home">Volunteer app</a> or <a href="#/board">coordinator board</a>. Join with the demo code provided in the submission.</li>
-          <li><b>Load synthetic households.</b> On the coordinator board, use "Load demo households" to fill the map.</li>
+          <li><b>Open the app.</b> <a href="#/home">Volunteer app</a> or <a href="#/board">coordinator board</a>. Join with the demo code provided in the submission, or scan the coordinator's invite QR.</li>
+          <li><b>Load synthetic households.</b> On the coordinator board, use "Load demo households". The real map of Marshall, NC fills with clocks and team routes.</li>
           <li><b>Generate run sheets.</b> Press "Show exactly what is sent", then "Generate run sheets". The result is labelled <span class="mk-src cloud">Cloud</span>.</li>
-          <li><b>Try doorstep intake.</b> In Chrome with on-device AI enabled, type a note and press "Read on this device". The result is labelled <span class="mk-src device">On this device</span>.</li>
+          <li><b>Ask in their language.</b> Doors → pick a door → "Ask in their language". Answer as the resident in Kreyòl, Español, العربية or Yorùbá. Code turns the taps into the record.</li>
+          <li><b>Nobody answered.</b> Leave a door-hanger and open its QR on a phone to check in as the resident, in six languages.</li>
+          <li><b>Try doorstep intake.</b> In Chrome with on-device AI, type a note and press "Read on this device". The result is labelled <span class="mk-src device">On this device</span>.</li>
+          <li><b>Check the numbers.</b> The <a href="#/eval">Accuracy</a> tab shows measured cloud and on-device runs on 30 labelled notes, and lets you re-run them.</li>
           <li><b>Go offline.</b> Turn on airplane mode. Capture a household, then reconnect and watch it sync.</li>
         </ol>
+        <h2>Turn on Gemini Nano in Chrome</h2>
+        <p>Desktop Chrome 138 or later. Open <code>chrome://flags</code>, set <b>Prompt API</b> to Enabled and relaunch. In DevTools run <code>await LanguageModel.availability()</code>. If it says <code>downloadable</code>, press <b>Install on-device AI</b> on the Doors tab to start the download (about 2 GB). Chrome decides whether your hardware qualifies.</p>
+        <h2>Android</h2>
+        <p>Install the APK from the GitHub releases page, swipe through the welcome, then tap <b>Scan invite QR</b>. Phones without Gemini Nano use the tap form and the language card, with the same rules and sync.</p>
         <h2>App Check debug token (local runs)</h2>
         <p>Firebase AI Logic requires App Check. When you run the web app locally, it prints a debug token in the browser console. Add it in <b>Firebase console → App Check → Apps → muster-web → Manage debug tokens</b>.</p>
         <h2>Source</h2>

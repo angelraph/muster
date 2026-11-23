@@ -45,6 +45,7 @@ import org.muster.app.ui.CapsStyle
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
 import org.muster.app.ui.MusterViewModel
+import org.muster.app.ui.LanguageCardScreen
 import java.util.UUID
 
 private val BUILDINGS = demoBuildings()
@@ -359,12 +360,18 @@ private fun Welcome(onDone: () -> Unit) {
 private fun JoinScreen(vm: MusterViewModel) {
     var code by remember { mutableStateOf("") }
     var err by remember { mutableStateOf(false) }
+    val scanInvite = rememberLauncherForActivityResult(ScanContract()) { r ->
+        val text = r.contents ?: return@rememberLauncherForActivityResult
+        code = (Regex("[?&]join=([^&#]+)").find(text)?.groupValues?.get(1)?.let { java.net.URLDecoder.decode(it, "UTF-8") } ?: text).trim().uppercase()
+    }
     Column(Modifier.fillMaxSize().systemBarsPadding().padding(24.dp), verticalArrangement = Arrangement.spacedBy(14.dp, Alignment.CenterVertically)) {
         Image(androidx.compose.ui.res.painterResource(R.mipmap.ic_launcher_foreground), null, Modifier.size(72.dp))
         Text("Join the response", style = MaterialTheme.typography.headlineMedium)
-        Text("Incident ${vm.repo.incidentId} · $NEIGHBOURHOOD_NAME. Ask your coordinator for the join code. You need signal only once.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text("Incident ${vm.repo.incidentId} · $NEIGHBOURHOOD_NAME. Scan your coordinator's invite QR or type the join code. You need signal only once.", color = MaterialTheme.colorScheme.onSurfaceVariant)
         OutlinedTextField(code, { code = it.uppercase() }, Modifier.fillMaxWidth(), label = { Text("Join code") }, placeholder = { Text("e.g. ABCD-1234") }, singleLine = true)
         Button({ vm.join(code) { err = true } }, Modifier.fillMaxWidth().height(54.dp), shape = RoundedCornerShape(16.dp), enabled = code.isNotBlank()) { Text("Join incident", fontWeight = FontWeight.Bold) }
+        OutlinedButton({ scanInvite.launch(ScanOptions().setPrompt("Point at the coordinator's invite QR").setBeepEnabled(false).setOrientationLocked(true)) },
+            Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(16.dp)) { Text("Scan invite QR") }
         Text("No account, no name, no email. You join anonymously.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         if (err) Text("That code did not work.", color = P1)
     }
@@ -472,6 +479,9 @@ private fun Capture(vm: MusterViewModel, building: String?, onDone: (Extraction,
             }
         }) { Text(if (busy) "Reading on this phone…" else "Read on this phone") }
         TextButton({ onDone(Extraction(), "tap") }) { Text("Tap instead") }
+        var showLang by remember { mutableStateOf(false) }
+        OutlinedButton({ showLang = true }, Modifier.fillMaxWidth()) { Text("Ask in their language") }
+        if (showLang) LanguageCardScreen(onDone = { a -> showLang = false; onDone(LanguageCard.apply(Extraction(), a), "tap") }, onClose = { showLang = false })
         if (building != null) OutlinedButton(onNoAnswer, Modifier.fillMaxWidth()) { Text("Nobody answered: leave a door-hanger") }
         TextButton(onBack) { Text("Back") }
         Text("Voice is offered only when this phone can recognise speech on the device. Note and photo never leave this phone.", fontSize = 12.sp, color = Color.Gray)
@@ -507,6 +517,9 @@ private fun Confirm(vm: MusterViewModel, s: Screen.Confirm, now: Long, onSaved: 
             }
             if (s.source == "on_device") Text("Filled on this phone. Check every field: you are the source of truth.", fontSize = 12.sp, color = Color.Gray)
             if (s.building != null && s.existing == null) OutlinedButton(onNoAnswer, Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)) { Text("Nobody answered: leave a door-hanger") }
+            var showLang by remember { mutableStateOf(false) }
+            OutlinedButton({ showLang = true }, Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)) { Text("Ask in their language") }
+            if (showLang) LanguageCardScreen(onDone = { ans -> showLang = false; draft = LanguageCard.apply(draft, ans) }, onClose = { showLang = false })
             IntakeForm(draft, cfg.incidentType, asks) { draft = it }
         }
         Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {

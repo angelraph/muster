@@ -10,6 +10,7 @@ import { firebase, setLocalConfig } from '../firebase';
 import { removeHousehold, saveHousehold } from '../store';
 import { RegistryCard, RoutePlan, SelfReportsCard, TEAM_COLORS } from './BoardExtras';
 import { Ics214Button } from './Ics214';
+import { InviteCard } from './Invite';
 import { Chip, INCIDENT_LABEL, PRIORITY_TEXT, SourceChip, useAttempts, useHouseholds, useLiveConfig, useNow, useOnline, useRegistry, useSelfReports } from './common';
 import { membership } from '../store';
 import { useEffect } from 'preact/hooks';
@@ -181,6 +182,8 @@ export function Board() {
             </div>))}
           <p class="small muted">Found by code (same building, different volunteers, no conflicting facts). You confirm every merge.</p>
         </div>)}
+
+      <InviteCard volunteers={new Set(list.map((h) => h.reportedBy)).size} />
 
       <div class="grid2">
         <SelfReportsCard reports={reports} attempts={attempts} label={(id) => bLabel(id)} now={now} />

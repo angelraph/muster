@@ -1,0 +1,247 @@
+{
+  "$comment": "Resident language card. Bundled with both apps so it works with no signal. Translations were drafted with AI assistance and written in plain words; an agency should have a native speaker review them before field use. The order of 'languages' is the order shown.",
+  "version": "2026-11-23",
+  "review": "Draft translations. Review with a native speaker before deployment.",
+  "languages": [
+    {
+      "code": "en", "name": "English", "english": "English", "dir": "ltr",
+      "card": {
+        "hello": "Hello. We are volunteers checking on every home after the storm.",
+        "consent": "We do not write down your name. Your answers help the response team decide who to visit first. May we ask a few questions?",
+        "agree": "Yes, ask", "decline": "No, thank you",
+        "point": "Tap your answer.",
+        "yes": "Yes", "no": "No", "unsure": "Not sure",
+        "days": "days", "today": "Today", "yesterday": "Yesterday", "twoDays": "2 days ago", "threeDays": "3 or more days ago",
+        "thanks": "Thank you. Help goes to whoever needs it most, not to whoever asks first.",
+        "q": {
+          "people": "How many people live here?",
+          "over65": "Is anyone here over 65 years old?",
+          "baby": "Is there a baby under 1 year old?",
+          "device": "Does anyone use oxygen or a medical machine that needs electricity?",
+          "power": "Do you have electricity right now?",
+          "dialysis": "Does anyone need dialysis?",
+          "dialysisWhen": "When was the last dialysis session?",
+          "insulin": "Does anyone use insulin?",
+          "insulinCold": "Is the insulin kept cold?",
+          "water": "How many days of drinking water do you have?",
+          "leave": "Does anyone need help to leave the house?"
+        }
+      },
+      "resident": {
+        "title": "Check in with the response team",
+        "intro": "A volunteer knocked while you were out or could not come to the door. Your answer goes only to the local response team. We never ask for your name.",
+        "code": "Code from the door-hanger",
+        "ok": "We are OK", "need": "We need help",
+        "whatNeed": "What do you need? Tap all that apply.",
+        "people": "People in the home",
+        "send": "Send", "sending": "Sending…",
+        "thanks": "Thank you.",
+        "thanksOk": "We have marked your home as OK. Stay safe.",
+        "thanksNeed": "The response team can see what you need and will come as soon as they can.",
+        "emergency": "In an emergency, call 911.",
+        "invalid": "This code was already used or is not valid.",
+        "needs": { "medication": "Medicine", "power": "Power for a medical device", "water": "Water", "food": "Food", "medical_transport": "A ride to treatment", "evacuation": "Help to leave", "baby_supplies": "Baby supplies", "mobility_help": "Help moving" }
+      }
+    },
+    {
+      "code": "es", "name": "Español", "english": "Spanish", "dir": "ltr",
+      "card": {
+        "hello": "Hola. Somos voluntarios y estamos visitando cada casa después de la tormenta.",
+        "consent": "No anotamos su nombre. Sus respuestas ayudan al equipo de respuesta a decidir a quién visitar primero. ¿Podemos hacerle unas preguntas?",
+        "agree": "Sí, pregunte", "decline": "No, gracias",
+        "point": "Toque su respuesta.",
+        "yes": "Sí", "no": "No", "unsure": "No sé",
+        "days": "días", "today": "Hoy", "yesterday": "Ayer", "twoDays": "Hace 2 días", "threeDays": "Hace 3 días o más",
+        "thanks": "Gracias. La ayuda va primero a quien más la necesita, no a quien pide primero.",
+        "q": {
+          "people": "¿Cuántas personas viven aquí?",
+          "over65": "¿Hay alguien aquí mayor de 65 años?",
+          "baby": "¿Hay un bebé de menos de 1 año?",
+          "device": "¿Alguien usa oxígeno o una máquina médica que necesita electricidad?",
+          "power": "¿Tiene electricidad ahora?",
+          "dialysis": "¿Alguien necesita diálisis?",
+          "dialysisWhen": "¿Cuándo fue la última sesión de diálisis?",
+          "insulin": "¿Alguien usa insulina?",
+          "insulinCold": "¿La insulina se mantiene fría?",
+          "water": "¿Para cuántos días tiene agua potable?",
+          "leave": "¿Alguien necesita ayuda para salir de la casa?"
+        }
+      },
+      "resident": {
+        "title": "Avísele al equipo de respuesta",
+        "intro": "Un voluntario tocó la puerta cuando usted no estaba o no pudo abrir. Su respuesta va solo al equipo de respuesta local. Nunca pedimos su nombre.",
+        "code": "Código de la tarjeta de la puerta",
+        "ok": "Estamos bien", "need": "Necesitamos ayuda",
+        "whatNeed": "¿Qué necesita? Toque todo lo que corresponda.",
+        "people": "Personas en la casa",
+        "send": "Enviar", "sending": "Enviando…",
+        "thanks": "Gracias.",
+        "thanksOk": "Marcamos su casa como bien. Cuídese.",
+        "thanksNeed": "El equipo de respuesta puede ver lo que necesita y vendrá lo antes posible.",
+        "emergency": "En una emergencia, llame al 911.",
+        "invalid": "Este código ya se usó o no es válido.",
+        "needs": { "medication": "Medicinas", "power": "Electricidad para un equipo médico", "water": "Agua", "food": "Comida", "medical_transport": "Transporte a un tratamiento", "evacuation": "Ayuda para salir", "baby_supplies": "Artículos para bebé", "mobility_help": "Ayuda para moverse" }
+      }
+    },
+    {
+      "code": "ht", "name": "Kreyòl ayisyen", "english": "Haitian Creole", "dir": "ltr",
+      "card": {
+        "hello": "Bonjou. Nou se volontè k ap vizite chak kay apre tanpèt la.",
+        "consent": "Nou pa ekri non ou. Repons ou yo ede ekip sekou a deside ki moun pou yo vizite an premye. Èske nou ka poze w kèk kesyon?",
+        "agree": "Wi, mande", "decline": "Non, mèsi",
+        "point": "Peze repons ou.",
+        "yes": "Wi", "no": "Non", "unsure": "Mwen pa konnen",
+        "days": "jou", "today": "Jodi a", "yesterday": "Yè", "twoDays": "2 jou de sa", "threeDays": "3 jou oswa plis",
+        "thanks": "Mèsi. Èd la ale bay moun ki pi bezwen l anvan, pa bay moun ki mande an premye.",
+        "q": {
+          "people": "Konbyen moun ki rete isit la?",
+          "over65": "Èske gen yon moun isit la ki gen plis pase 65 an?",
+          "baby": "Èske gen yon tibebe ki poko gen 1 an?",
+          "device": "Èske gen yon moun ki itilize oksijèn oswa yon machin medikal ki bezwen kouran?",
+          "power": "Èske ou gen kouran kounye a?",
+          "dialysis": "Èske gen yon moun ki bezwen dyaliz?",
+          "dialysisWhen": "Ki lè dènye seyans dyaliz la te fèt?",
+          "insulin": "Èske gen yon moun ki pran ensilin?",
+          "insulinCold": "Èske ensilin lan kenbe nan frèt?",
+          "water": "Pou konbyen jou ou gen dlo pou bwè?",
+          "leave": "Èske gen yon moun ki bezwen èd pou soti nan kay la?"
+        }
+      },
+      "resident": {
+        "title": "Fè ekip sekou a konnen kijan ou ye",
+        "intro": "Yon volontè te frape pandan ou pa t la oswa ou pa t ka vin louvri. Repons ou ale sèlman bay ekip sekou lokal la. Nou pa janm mande non ou.",
+        "code": "Kòd ki sou kat pòt la",
+        "ok": "Nou byen", "need": "Nou bezwen èd",
+        "whatNeed": "Kisa ou bezwen? Peze tout sa ki koresponn.",
+        "people": "Konbyen moun nan kay la",
+        "send": "Voye", "sending": "N ap voye…",
+        "thanks": "Mèsi.",
+        "thanksOk": "Nou make kay ou kòm byen. Pran swen tèt ou.",
+        "thanksNeed": "Ekip sekou a ka wè sa ou bezwen, epi y ap vini pi vit yo kapab.",
+        "emergency": "Si gen ijans, rele 911.",
+        "invalid": "Kòd sa a deja itilize oswa li pa bon.",
+        "needs": { "medication": "Medikaman", "power": "Kouran pou yon aparèy medikal", "water": "Dlo", "food": "Manje", "medical_transport": "Transpò pou al fè tretman", "evacuation": "Èd pou kite kay la", "baby_supplies": "Bagay pou tibebe", "mobility_help": "Èd pou deplase" }
+      }
+    },
+    {
+      "code": "fr", "name": "Français", "english": "French", "dir": "ltr",
+      "card": {
+        "hello": "Bonjour. Nous sommes des bénévoles et nous passons voir chaque maison après la tempête.",
+        "consent": "Nous n'écrivons pas votre nom. Vos réponses aident l'équipe de secours à décider qui visiter en premier. Pouvons-nous vous poser quelques questions ?",
+        "agree": "Oui, allez-y", "decline": "Non, merci",
+        "point": "Touchez votre réponse.",
+        "yes": "Oui", "no": "Non", "unsure": "Je ne sais pas",
+        "days": "jours", "today": "Aujourd'hui", "yesterday": "Hier", "twoDays": "Il y a 2 jours", "threeDays": "Il y a 3 jours ou plus",
+        "thanks": "Merci. L'aide va d'abord à ceux qui en ont le plus besoin, pas à ceux qui demandent en premier.",
+        "q": {
+          "people": "Combien de personnes vivent ici ?",
+          "over65": "Y a-t-il ici une personne de plus de 65 ans ?",
+          "baby": "Y a-t-il un bébé de moins d'un an ?",
+          "device": "Quelqu'un utilise-t-il de l'oxygène ou un appareil médical qui a besoin d'électricité ?",
+          "power": "Avez-vous de l'électricité en ce moment ?",
+          "dialysis": "Quelqu'un a-t-il besoin de dialyse ?",
+          "dialysisWhen": "À quand remonte la dernière séance de dialyse ?",
+          "insulin": "Quelqu'un utilise-t-il de l'insuline ?",
+          "insulinCold": "L'insuline est-elle gardée au frais ?",
+          "water": "Pour combien de jours avez-vous de l'eau potable ?",
+          "leave": "Quelqu'un a-t-il besoin d'aide pour quitter la maison ?"
+        }
+      },
+      "resident": {
+        "title": "Donnez des nouvelles à l'équipe de secours",
+        "intro": "Un bénévole a frappé pendant votre absence ou vous n'avez pas pu ouvrir. Votre réponse va uniquement à l'équipe de secours locale. Nous ne demandons jamais votre nom.",
+        "code": "Code inscrit sur l'affichette de porte",
+        "ok": "Nous allons bien", "need": "Nous avons besoin d'aide",
+        "whatNeed": "De quoi avez-vous besoin ? Touchez tout ce qui s'applique.",
+        "people": "Personnes dans le logement",
+        "send": "Envoyer", "sending": "Envoi…",
+        "thanks": "Merci.",
+        "thanksOk": "Nous avons noté que tout va bien chez vous. Prenez soin de vous.",
+        "thanksNeed": "L'équipe de secours voit ce dont vous avez besoin et viendra dès que possible.",
+        "emergency": "En cas d'urgence, appelez le 911.",
+        "invalid": "Ce code a déjà été utilisé ou n'est pas valide.",
+        "needs": { "medication": "Médicaments", "power": "Électricité pour un appareil médical", "water": "Eau", "food": "Nourriture", "medical_transport": "Transport vers un traitement", "evacuation": "Aide pour partir", "baby_supplies": "Articles pour bébé", "mobility_help": "Aide pour se déplacer" }
+      }
+    },
+    {
+      "code": "ar", "name": "العربية", "english": "Arabic", "dir": "rtl",
+      "card": {
+        "hello": "مرحباً. نحن متطوعون نزور كل منزل بعد العاصفة.",
+        "consent": "لا نكتب اسمك. تساعد إجاباتك فريق الاستجابة على تحديد من يزورون أولاً. هل يمكننا أن نطرح عليك بعض الأسئلة؟",
+        "agree": "نعم، تفضّل", "decline": "لا، شكراً",
+        "point": "اضغط على إجابتك.",
+        "yes": "نعم", "no": "لا", "unsure": "لا أعرف",
+        "days": "أيام", "today": "اليوم", "yesterday": "أمس", "twoDays": "قبل يومين", "threeDays": "قبل 3 أيام أو أكثر",
+        "thanks": "شكراً لك. تذهب المساعدة أولاً إلى الأكثر حاجة، لا إلى من يطلب أولاً.",
+        "q": {
+          "people": "كم شخصاً يعيش هنا؟",
+          "over65": "هل يوجد هنا شخص عمره أكثر من 65 سنة؟",
+          "baby": "هل يوجد طفل رضيع عمره أقل من سنة؟",
+          "device": "هل يستخدم أحد الأكسجين أو جهازاً طبياً يحتاج إلى الكهرباء؟",
+          "power": "هل لديكم كهرباء الآن؟",
+          "dialysis": "هل يحتاج أحد إلى غسيل الكلى؟",
+          "dialysisWhen": "متى كانت آخر جلسة غسيل كلى؟",
+          "insulin": "هل يستخدم أحد الإنسولين؟",
+          "insulinCold": "هل يُحفظ الإنسولين بارداً؟",
+          "water": "لكم يوماً يكفيكم ماء الشرب؟",
+          "leave": "هل يحتاج أحد إلى مساعدة لمغادرة المنزل؟"
+        }
+      },
+      "resident": {
+        "title": "أخبر فريق الاستجابة عن حالك",
+        "intro": "طرق أحد المتطوعين الباب عندما كنت غائباً أو لم تتمكن من فتحه. تصل إجابتك إلى فريق الاستجابة المحلي فقط. لا نطلب اسمك أبداً.",
+        "code": "الرمز المكتوب على بطاقة الباب",
+        "ok": "نحن بخير", "need": "نحتاج إلى مساعدة",
+        "whatNeed": "ماذا تحتاج؟ اضغط على كل ما ينطبق.",
+        "people": "عدد الأشخاص في المنزل",
+        "send": "إرسال", "sending": "جارٍ الإرسال…",
+        "thanks": "شكراً لك.",
+        "thanksOk": "سجّلنا أن منزلك بخير. ابقَ آمناً.",
+        "thanksNeed": "يستطيع فريق الاستجابة رؤية ما تحتاجه وسيأتي في أقرب وقت ممكن.",
+        "emergency": "في حالة الطوارئ، اتصل بالرقم 911.",
+        "invalid": "هذا الرمز مستخدم من قبل أو غير صالح.",
+        "needs": { "medication": "أدوية", "power": "كهرباء لجهاز طبي", "water": "ماء", "food": "طعام", "medical_transport": "توصيل إلى العلاج", "evacuation": "مساعدة على المغادرة", "baby_supplies": "مستلزمات الرضّع", "mobility_help": "مساعدة على الحركة" }
+      }
+    },
+    {
+      "code": "yo", "name": "Yorùbá", "english": "Yoruba", "dir": "ltr",
+      "card": {
+        "hello": "Ẹ n lẹ. Olùyọ̀ǹda ara ẹni ni wá, a ń bẹ gbogbo ilé wò lẹ́yìn ìjì náà.",
+        "consent": "A kò ní kọ orúkọ yín sílẹ̀. Ìdáhùn yín yóò ran ẹgbẹ́ ìrànlọ́wọ́ lọ́wọ́ láti mọ ẹni tí wọn yóò kọ́kọ́ bẹ̀ wò. Ṣé a lè bi yín ní ìbéèrè díẹ̀?",
+        "agree": "Bẹ́ẹ̀ni, ẹ béèrè", "decline": "Rárá, ẹ ṣé",
+        "point": "Ẹ tẹ ìdáhùn yín.",
+        "yes": "Bẹ́ẹ̀ni", "no": "Rárá", "unsure": "Mi ò mọ̀",
+        "days": "ọjọ́", "today": "Lónìí", "yesterday": "Àná", "twoDays": "Ọjọ́ méjì sẹ́yìn", "threeDays": "Ọjọ́ mẹ́ta sẹ́yìn tàbí jù bẹ́ẹ̀ lọ",
+        "thanks": "Ẹ ṣé. Ẹni tí ó nílò ìrànlọ́wọ́ jù ni a kọ́kọ́ ń ràn lọ́wọ́, kì í ṣe ẹni tí ó kọ́kọ́ béèrè.",
+        "q": {
+          "people": "Ènìyàn mélòó ló ń gbé ibí?",
+          "over65": "Ṣé ẹnìkan wà níbí tí ó ti ju ọmọ ọdún 65 lọ?",
+          "baby": "Ṣé ọmọ ọwọ́ kan wà tí kò tíì pé ọdún kan?",
+          "device": "Ṣé ẹnìkan ń lo afẹ́fẹ́ oxygen tàbí ẹ̀rọ ìtọ́jú tí ó nílò iná mànàmáná?",
+          "power": "Ṣé iná mànàmáná wà báyìí?",
+          "dialysis": "Ṣé ẹnìkan nílò ìtọ́jú dialysis (fífọ kíndìnrín)?",
+          "dialysisWhen": "Ìgbà wo ni ìtọ́jú dialysis tó kẹ́yìn?",
+          "insulin": "Ṣé ẹnìkan ń lo insulin?",
+          "insulinCold": "Ṣé ẹ ń pa insulin náà mọ́ sí ibi tútù?",
+          "water": "Omi mímu yín yóò tó fún ọjọ́ mélòó?",
+          "leave": "Ṣé ẹnìkan nílò ìrànlọ́wọ́ láti jáde kúrò nínú ilé?"
+        }
+      },
+      "resident": {
+        "title": "Ẹ jẹ́ kí ẹgbẹ́ ìrànlọ́wọ́ mọ bí ẹ ṣe wà",
+        "intro": "Olùyọ̀ǹda kan kan ilẹ̀kùn nígbà tí ẹ kò sí nílé tàbí tí ẹ kò lè ṣí i. Ẹgbẹ́ ìrànlọ́wọ́ àdúgbò nìkan ni yóò rí ìdáhùn yín. A kò ní béèrè orúkọ yín láé.",
+        "code": "Kóòdù tí ó wà lórí káàdì ilẹ̀kùn",
+        "ok": "A wà dáadáa", "need": "A nílò ìrànlọ́wọ́",
+        "whatNeed": "Kí ni ẹ nílò? Ẹ tẹ gbogbo èyí tí ó bá yín mu.",
+        "people": "Iye ènìyàn nínú ilé",
+        "send": "Fi ránṣẹ́", "sending": "À ń fi ránṣẹ́…",
+        "thanks": "Ẹ ṣé.",
+        "thanksOk": "A ti sàmì sí ilé yín pé ẹ wà dáadáa. Ẹ máa ṣọ́ra.",
+        "thanksNeed": "Ẹgbẹ́ ìrànlọ́wọ́ lè rí ohun tí ẹ nílò, wọn yóò sì wá ní kíákíá bí wọ́n bá ti lè ṣe é.",
+        "emergency": "Bí pàjáwìrì bá wà, ẹ pe 911.",
+        "invalid": "Wọ́n ti lo kóòdù yìí tẹ́lẹ̀, tàbí kò tọ̀nà.",
+        "needs": { "medication": "Oògùn", "power": "Iná fún ẹ̀rọ ìtọ́jú", "water": "Omi", "food": "Oúnjẹ", "medical_transport": "Ọkọ̀ lọ síbi ìtọ́jú", "evacuation": "Ìrànlọ́wọ́ láti kúrò", "baby_supplies": "Ohun èlò ọmọ ọwọ́", "mobility_help": "Ìrànlọ́wọ́ láti rìn" }
+      }
+    }
+  ]
+}

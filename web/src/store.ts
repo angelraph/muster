@@ -61,6 +61,17 @@ export async function membership(): Promise<'volunteer' | 'coordinator' | 'none'
   } catch { return cached ?? 'none'; }
 }
 
+/** Coordinators share this so volunteers can join. Members can read the incident doc (rules). */
+export async function readJoinCode(): Promise<string | null> {
+  const f = firebase();
+  if (!f) return 'DEMO-0000';
+  try { const snap = await getDoc(doc(f.db, 'incidents', INCIDENT_ID)); return (snap.data()?.joinCode as string | undefined) ?? null; }
+  catch { return null; }
+}
+
+/** The link inside the invite QR. The code rides in the URL fragment, which browsers never send to a server. */
+export const inviteUrl = (code: string) => `${location.origin}/#/home?join=${encodeURIComponent(code)}`;
+
 export async function joinIncident(code: string): Promise<void> {
   const f = firebase();
   if (!f) return;

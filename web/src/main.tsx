@@ -57,7 +57,8 @@ function Site({ route }: { route: string }) {
 }
 
 function JoinGate({ onJoined }: { onJoined: () => void }) {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(() => new URLSearchParams(location.hash.split('?')[1] ?? '').get('join') ?? '');
+  const [invited] = useState(() => !!code);
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
   async function go(e: Event) {
@@ -69,7 +70,7 @@ function JoinGate({ onJoined }: { onJoined: () => void }) {
       <form class="join-card" onSubmit={go}>
         <Logo size={44} word={false} />
         <h1>Join the response</h1>
-        <p class="muted">Incident <b>{INCIDENT_ID}</b>. Ask your coordinator for the join code. You only need signal once.</p>
+        <p class="muted">Incident <b>{INCIDENT_ID}</b>. {invited ? 'Your invite filled in the code. Check it and tap Join.' : 'Ask your coordinator for the join code, or scan their invite QR.'} You only need signal once.</p>
         <label class="field-l">Join code
           <input value={code} autoFocus autoCapitalize="characters" onInput={(e) => setCode((e.target as HTMLInputElement).value)} placeholder="e.g. ABCD-1234" />
         </label>

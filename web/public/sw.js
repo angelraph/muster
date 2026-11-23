@@ -1,5 +1,5 @@
 // Offline app shell: after one visit with signal, Muster opens with no network at all.
-const CACHE = 'muster-shell-v2';
+const CACHE = 'muster-shell-v3';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/index.html', '/manifest.webmanifest', '/favicon.ico', '/brand/icon-128.png', '/brand/app-192.png'])).then(() => self.skipWaiting()));
