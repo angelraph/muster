@@ -38,6 +38,7 @@ export function AppHome() {
         {stats.map(([n, l, c]) => <div class="ah-stat" key={l}><b class={c}>{n}</b><span>{l}</span></div>)}
       </div>
       <a class="btn primary block ah-go" href="#/volunteer"><Icon name="door" size={20} /> Go to the next door</a>
+      <a class="btn ghost block ah-lang" href="#/volunteer?lang"><Icon name="globe" size={20} /> Ask in their language</a>
       <div class="ah-row">
         <a class="btn ghost" href="#/board"><Icon name="map" size={18} /> Coordinator board</a>
         <a class="btn ghost" href="#/volunteer?handoff"><Icon name="qr" size={18} /> QR handoff</a>

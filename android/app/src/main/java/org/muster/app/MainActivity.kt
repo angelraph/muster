@@ -71,7 +71,7 @@ private sealed interface Screen {
     data class Hanger(val a: org.muster.app.data.Repo.Attempt) : Screen
     data object Doors : Screen
     data class Capture(val building: String?) : Screen
-    data class Confirm(val building: String?, val draft: Extraction, val source: String, val existing: Household? = null) : Screen
+    data class Confirm(val building: String?, val draft: Extraction, val source: String, val existing: Household? = null, val openLang: Boolean = false) : Screen
     data class Saved(val h: Household) : Screen
     data object Team : Screen
     data object Handoff : Screen
@@ -183,6 +183,10 @@ private fun Home(vm: MusterViewModel, now: Long, go: (Screen) -> Unit) {
         }
         Button({ go(Screen.Doors) }, Modifier.fillMaxWidth().height(58.dp), shape = RoundedCornerShape(16.dp)) {
             Glyph(Ic.door, Color.White); Spacer(Modifier.width(10.dp)); Text("Go to the next door", fontSize = 17.sp, fontWeight = FontWeight.Bold)
+        }
+        OutlinedButton({ go(Screen.Confirm(null, Extraction(), "tap", openLang = true)) }, Modifier.fillMaxWidth().height(54.dp), shape = RoundedCornerShape(14.dp),
+            border = androidx.compose.foundation.BorderStroke(1.5.dp, M.cyan)) {
+            Text("🌐  Ask in their language", fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             OutlinedButton({ go(Screen.Team) }, Modifier.weight(1f).height(52.dp), shape = RoundedCornerShape(14.dp)) { Glyph(Ic.team); Spacer(Modifier.width(8.dp)); Text("Team list") }
@@ -500,6 +504,8 @@ private fun Confirm(vm: MusterViewModel, s: Screen.Confirm, now: Long, onSaved: 
     val asks = askKeys(draft)
     Column(Modifier.fillMaxSize()) {
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            var showLang by remember(s) { mutableStateOf(s.openLang) }
+            if (showLang) LanguageCardScreen(onDone = { ans -> showLang = false; draft = LanguageCard.apply(draft, ans) }, onClose = { showLang = false })
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(label(s.building), fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 Tag(if (s.source == "on_device") "On this phone" else "Tapped", if (s.source == "on_device") Color(0xFF0C4A6E) else Color(0xFF334155))
@@ -515,11 +521,10 @@ private fun Confirm(vm: MusterViewModel, s: Screen.Confirm, now: Long, onSaved: 
                     if (asks.isNotEmpty()) Text("Ask before you leave: highlighted fields.", color = Color(0xFFFDE68A))
                 }
             }
+            OutlinedButton({ showLang = true }, Modifier.fillMaxWidth().height(52.dp), shape = RoundedCornerShape(14.dp),
+                border = androidx.compose.foundation.BorderStroke(1.5.dp, M.cyan)) { Text("🌐  Ask in their language", fontWeight = FontWeight.Bold) }
             if (s.source == "on_device") Text("Filled on this phone. Check every field: you are the source of truth.", fontSize = 12.sp, color = Color.Gray)
             if (s.building != null && s.existing == null) OutlinedButton(onNoAnswer, Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)) { Text("Nobody answered: leave a door-hanger") }
-            var showLang by remember { mutableStateOf(false) }
-            OutlinedButton({ showLang = true }, Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)) { Text("Ask in their language") }
-            if (showLang) LanguageCardScreen(onDone = { ans -> showLang = false; draft = LanguageCard.apply(draft, ans) }, onClose = { showLang = false })
             IntakeForm(draft, cfg.incidentType, asks) { draft = it }
         }
         Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {

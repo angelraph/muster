@@ -306,3 +306,5 @@ details summary { cursor: pointer; color: var(--brand-2); margin: 8px 0; }
 .res-langs button { font: inherit; font-size: 13px; padding: 6px 10px; border-radius: 99px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
 .res-langs button.on { color: var(--text); border-color: #38bdf8; background: rgba(56,189,248,.12); }
 .hanger-langs { font-size: 12px; opacity: .8; margin: 0; }
+
+.ah-lang { margin-top: 10px; border: 1.5px solid #38bdf8 !important; font-weight: 700; }

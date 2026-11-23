@@ -25,7 +25,7 @@ export function Volunteer() {
   const [progress, setProgress] = useState<number | null>(null);
   const [speech, setSpeech] = useState<SpeechState>('unsupported');
   const [me, setMe] = useState('');
-  const [step, setStep] = useState<Step>('pick');
+  const [step, setStep] = useState<Step>(() => (location.hash.includes('?lang') ? 'confirm' : 'pick'));
   const [building, setBuilding] = useState<string | null>(null);
   const [note, setNote] = useState('');
   const [photo, setPhoto] = useState<{ base64: string; mimeType: 'image/jpeg' | 'image/png'; url: string } | null>(null);
@@ -36,7 +36,7 @@ export function Volunteer() {
   const [stopMic, setStopMic] = useState<null | (() => void)>(null);
   const [lastSaved, setLastSaved] = useState<Household | null>(null);
   const [showHandoff, setShowHandoff] = useState(() => location.hash.includes('handoff'));
-  const [showLang, setShowLang] = useState(false);
+  const [showLang, setShowLang] = useState(() => location.hash.includes('?lang'));
   const [synced, setSynced] = useState(false);
   const attempts = useAttempts();
   const registry = useRegistry();
