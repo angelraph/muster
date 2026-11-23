@@ -5,61 +5,113 @@ import { Volunteer } from './ui/Volunteer';
 import { demoScenario } from './core/scenario';
 import { INCIDENT_ID, joinIncident, membership, saveHousehold } from './store';
 import { firebase } from './firebase';
+import { SiteFooter, SiteNav } from './site/chrome';
+import { Landing } from './site/Landing';
+import { AboutPage, AgenciesPage, FaqPage, FeaturesPage, HowPage, JudgesPage, NotFound, PrivacyPage, SafetyPage } from './site/pages';
+import { Logo } from './site/brand';
+import { Icon } from './site/icons';
+import { useRevealAll } from './site/motion';
+import { useOnline } from './ui/common';
 import './styles.css';
+import './site/site.css';
 
 function useRoute() {
   const [r, setR] = useState(location.hash.slice(1) || '/');
-  useEffect(() => { const f = () => setR(location.hash.slice(1) || '/'); addEventListener('hashchange', f); return () => removeEventListener('hashchange', f); }, []);
+  useEffect(() => {
+    const f = () => { setR(location.hash.slice(1) || '/'); scrollTo({ top: 0 }); };
+    addEventListener('hashchange', f); return () => removeEventListener('hashchange', f);
+  }, []);
   return r;
 }
 
-function Home() {
-  const [loaded, setLoaded] = useState(false);
+const SITE: Record<string, [string, () => preact.JSX.Element]> = {
+  '/': ['Muster: find them before their clock runs out', Landing],
+  '/how': ['How it works · Muster', HowPage],
+  '/features': ['Features · Muster', FeaturesPage],
+  '/agencies': ['For response agencies · Muster', AgenciesPage],
+  '/faq': ['FAQ · Muster', FaqPage],
+  '/privacy': ['Privacy · Muster', PrivacyPage],
+  '/safety': ['Safety & limits · Muster', SafetyPage],
+  '/judges': ['For judges · Muster', JudgesPage],
+  '/about': ['About & credits · Muster', AboutPage],
+};
+const APP: Record<string, string> = { '/volunteer': 'Doors · Muster', '/board': 'Coordinator · Muster' };
+
+function Site({ route }: { route: string }) {
+  const entry = SITE[route];
+  const Page = entry?.[1] ?? NotFound;
+  useEffect(() => { document.title = entry?.[0] ?? 'Not found · Muster'; }, [route]);
+  useRevealAll(route);
   return (
-    <main class="home">
-      <h1>Muster</h1>
-      <p class="lead">After a disaster, many deaths come in the days after the storm: oxygen runs out, insulin goes warm, a dialysis session is missed, someone living alone is never checked.
-        Muster finds those households before their time runs out, even with every cell tower down.</p>
-      <div class="choices">
-        <a class="choice" href="#/volunteer"><b>I'm at the doors</b><span>Volunteer. Works with no signal. On-device AI if this device has it, tap mode if not.</span></a>
-        <a class="choice" href="#/board"><b>I'm coordinating</b><span>Shelter or response center. Time-to-harm board, unchecked homes, cloud run sheets.</span></a>
-      </div>
-      <p class="small muted">Incident: {INCIDENT_ID} · {firebase() ? 'Firebase connected' : 'Demo mode: Firebase not configured yet'}</p>
-      <button class="btn ghost small" onClick={async () => { for (const h of demoScenario(Date.now(), INCIDENT_ID)) await saveHousehold(h); setLoaded(true); }}>
-        {loaded ? 'Demo households loaded' : 'Load demo households (synthetic)'}
-      </button>
-      <p class="small muted">Needs intake and logistics only. Not medical advice. Thresholds come from the responding agency's rulebook.</p>
-    </main>
+    <div class="site">
+      <a class="skip" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a>
+      <SiteNav route={route} />
+      <main id="main" tabIndex={-1}><Page /></main>
+      <SiteFooter />
+    </div>
   );
 }
 
 function JoinGate({ onJoined }: { onJoined: () => void }) {
   const [code, setCode] = useState('');
   const [err, setErr] = useState('');
+  const [busy, setBusy] = useState(false);
+  async function go(e: Event) {
+    e.preventDefault(); setErr(''); setBusy(true);
+    try { await joinIncident(code); onJoined(); } catch { setErr('That code did not work. Check it with your coordinator.'); } finally { setBusy(false); }
+  }
   return (
-    <main class="home">
-      <h2>Join incident {INCIDENT_ID}</h2>
-      <p class="muted">Ask your coordinator for the join code. You only need signal once.</p>
-      <div class="actions">
-        <input value={code} onInput={(e) => setCode((e.target as HTMLInputElement).value)} placeholder="Join code" />
-        <button class="btn primary" onClick={async () => { try { await joinIncident(code); onJoined(); } catch { setErr('That code did not work.'); } }}>Join</button>
-      </div>
-      {err && <p class="error">{err}</p>}
+    <main class="join">
+      <form class="join-card" onSubmit={go}>
+        <Logo size={44} word={false} />
+        <h1>Join the response</h1>
+        <p class="muted">Incident <b>{INCIDENT_ID}</b>. Ask your coordinator for the join code. You only need signal once.</p>
+        <label class="field-l">Join code
+          <input value={code} autoFocus autoCapitalize="characters" onInput={(e) => setCode((e.target as HTMLInputElement).value)} placeholder="e.g. RIVER-2026" />
+        </label>
+        {err && <p class="error">{err}</p>}
+        <button class="btn primary block" disabled={busy || !code.trim()}>{busy ? 'Joining…' : 'Join incident'}</button>
+        <p class="small muted">No account, no name, no email. You join anonymously.</p>
+        <a class="small" href="#/">Back to the website</a>
+      </form>
     </main>
+  );
+}
+
+function AppShell({ route }: { route: string }) {
+  const online = useOnline();
+  const [role, setRole] = useState<string>('…');
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => { membership().then(setRole); }, []);
+  useEffect(() => { document.title = APP[route]; }, [route]);
+  if (role === 'none') return <JoinGate onJoined={() => membership().then(setRole)} />;
+  return (
+    <div class="app">
+      <header class="appbar">
+        <a href="#/" class="appbar-brand" aria-label="Muster website"><Logo size={28} /></a>
+        <nav class="appbar-tabs" aria-label="App">
+          <a href="#/volunteer" class={route === '/volunteer' ? 'on' : ''}><Icon name="door" size={18} /> <span>Doors</span></a>
+          <a href="#/board" class={route === '/board' ? 'on' : ''}><Icon name="map" size={18} /> <span>Coordinator</span></a>
+        </nav>
+        <div class="appbar-right">
+          {route === '/board' && (
+            <button class="btn small ghost hide-sm" title="Adds synthetic households for demos"
+              onClick={async () => { for (const h of demoScenario(Date.now(), INCIDENT_ID)) await saveHousehold(h); setLoaded(true); }}>
+              {loaded ? 'Demo loaded' : 'Load demo households'}
+            </button>)}
+          <span class={`net ${online ? 'on' : 'off'}`}><i />{online ? 'Online' : 'Offline'}</span>
+          {role === 'coordinator' && <span class="role">Coordinator</span>}
+          <span class="net hide-sm" title={firebase() ? 'Connected to Firebase' : 'Demo mode, Firebase not configured'}>{firebase() ? INCIDENT_ID : 'Demo mode'}</span>
+        </div>
+      </header>
+      {route === '/volunteer' ? <Volunteer /> : <Board />}
+    </div>
   );
 }
 
 function App() {
   const r = useRoute();
-  const [role, setRole] = useState<string>('…');
-  useEffect(() => { membership().then(setRole); }, []);
-  if (role === 'none') return <JoinGate onJoined={() => membership().then(setRole)} />;
-  return (
-    <>
-      <nav class="nav"><a href="#/">Muster</a><a href="#/volunteer">Doors</a><a href="#/board">Coordinator</a></nav>
-      {r === '/volunteer' ? <Volunteer /> : r === '/board' ? <Board /> : <Home />}
-    </>
-  );
+  return r in APP ? <AppShell route={r} /> : <Site route={r} />;
 }
 
 render(<App />, document.getElementById('app')!);
