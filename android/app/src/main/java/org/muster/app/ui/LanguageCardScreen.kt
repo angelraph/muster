@@ -38,6 +38,8 @@ fun LanguageCardScreen(onDone: (Map<String, Any>) -> Unit, onClose: () -> Unit) 
     val q = LanguageCard.next(answers)
     val asked = LanguageCard.FLOW.count { it.askIf(answers) }
 
+    // Closing never throws answers away: whatever the resident tapped goes to the form for the volunteer to check.
+    val finish = { if (answers.isNotEmpty()) onDone(answers) else onClose() }
     fun answer(v: Any) {
         val cur = q ?: return
         history = history + listOf(answers); answers = answers + (cur.id to v)
@@ -51,14 +53,14 @@ fun LanguageCardScreen(onDone: (Map<String, Any>) -> Unit, onClose: () -> Unit) 
         }
     }
 
-    Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    Dialog(onDismissRequest = finish, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
             Column(Modifier.fillMaxSize().systemBarsPadding().padding(18.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (stage != "pick") TextButton(::back) { Text("← Back") } else Text("Hand the phone to the resident", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.weight(1f))
                     if (stage == "q") Text("${answers.size + 1} / $asked", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    TextButton(onClose) { Text("Close") }
+                    TextButton(finish) { Text(if (answers.isNotEmpty()) "Done" else "Close") }
                 }
                 CompositionLocalProvider(LocalLayoutDirection provides if (stage != "pick" && L.rtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
                     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(14.dp)) {

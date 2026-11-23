@@ -18,6 +18,8 @@ export function LanguageCard({ onDone, onClose }: { onDone: (a: Answers) => void
   const asked = FLOW.filter((f) => !f.when || f.when(answers)).length;
   const done = Object.keys(answers).length;
 
+  // Closing never throws answers away: whatever the resident tapped goes to the form for the volunteer to check.
+  const finish = () => (Object.keys(answers).length ? onDone(answers) : onClose());
   function pick(c: string) { setCode(c); setStage('consent'); try { localStorage.setItem(PREF, c); } catch { /* ignore */ } }
   function answer(v: Answer) {
     if (!q) return;
@@ -43,7 +45,7 @@ export function LanguageCard({ onDone, onClose }: { onDone: (a: Answers) => void
         <div class="langcard-top" dir="ltr">
           {stage !== 'pick' ? <button class="btn small ghost" onClick={back}>← Back</button> : <span class="small muted">Hand the phone to the resident</span>}
           {stage === 'q' && <span class="small muted">{done + 1} / {asked}</span>}
-          <button class="btn small ghost" onClick={onClose} aria-label="Close language card"><Icon name="close" size={16} /></button>
+          <button class="btn small ghost" onClick={finish} aria-label={done ? 'Done, fill the form' : 'Close language card'}>{done ? 'Done' : <Icon name="close" size={16} />}</button>
         </div>
 
         {stage === 'pick' && (
