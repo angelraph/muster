@@ -1,0 +1,88 @@
+// Firebase AI Logic hybrid inference.
+//  - Doorstep extraction: ONLY_ON_DEVICE. If the model is not ready we refuse and open tap mode;
+//    a transcript is never "fallen back" to the cloud.
+//  - Coordinator one-liner: PREFER_ON_DEVICE (works if the shelter link is down).
+//  - Run sheets / handover / translation: ONLY_IN_CLOUD, structured records only (see cloud.ts).
+import { getGenerativeModel, InferenceMode, type GenerativeModel, type InferenceSource, type Part } from 'firebase/ai';
+import schemaJson from '../../shared/extraction.schema.json';
+import { firebase } from './firebase';
+import { normalizeExtraction, parseModelJson } from './core/normalize';
+import type { Extraction } from './core/types';
+
+export type DeviceModelState = 'available' | 'downloadable' | 'downloading' | 'unavailable' | 'no-api' | 'no-firebase';
+
+interface LanguageModelStatic { availability(o?: unknown): Promise<string> }
+const LM = (): LanguageModelStatic | undefined => (globalThis as unknown as { LanguageModel?: LanguageModelStatic }).LanguageModel;
+
+const EXPECTED = {
+  expectedInputs: [{ type: 'text' as const, languages: ['en'] }, { type: 'image' as const }],
+  expectedOutputs: [{ type: 'text' as const, languages: ['en'] }],
+};
+
+/** What this device can do right now. Drives the banner and whether the mic/photo buttons exist. */
+export async function deviceModelState(): Promise<DeviceModelState> {
+  if (!firebase()) return 'no-firebase';
+  const lm = LM();
+  if (!lm) return 'no-api';
+  try { return (await lm.availability(EXPECTED)) as DeviceModelState; } catch { return 'unavailable'; }
+}
+
+const { $comment: _c, ...EXTRACTION_SCHEMA } = schemaJson as Record<string, unknown>;
+
+const SYSTEM = `You fill in a disaster needs-intake record from a volunteer's doorstep note.
+Rules:
+- Only record what the note states. If something is not stated, use -1 for numbers and "unknown" for yes/no fields. Never guess.
+- NEVER write a person's name anywhere. "descriptor" is only a way to find the door, e.g. "blue door, 2nd floor".
+- over65 counts people aged 65+. adults counts people 18-64. children counts ages 1-17. infantsUnder1 counts babies under 1.
+- deviceType is a powered medical device in the home (oxygen concentrator, ventilator, CPAP, suction). Oxygen cylinders without power are not powered devices: use "none" and add "medication" to needs.
+- devicePower "none" means the device has no mains power right now. deviceBatteryHours is how long its battery/backup lasts, in hours.
+- Convert durations: "two days" = 2 days, "since yesterday" for dialysis = 24 hours ago, "half a day" = 0.5.
+- needs lists only needs the note mentions.`;
+
+let extractor: GenerativeModel | null = null;
+function extractionModel(): GenerativeModel {
+  const f = firebase();
+  if (!f) throw new Error('Firebase not configured');
+  extractor ??= getGenerativeModel(f.ai, {
+    mode: InferenceMode.ONLY_ON_DEVICE,
+    onDeviceParams: {
+      createOptions: { ...EXPECTED, initialPrompts: [{ role: 'system', content: [{ type: 'text', value: SYSTEM }] }] },
+      promptOptions: { responseConstraint: EXTRACTION_SCHEMA },
+    },
+  });
+  return extractor;
+}
+
+/** Must be called from a click: Chrome only downloads the model after a user gesture. */
+export async function prepareDeviceModel(onProgress: (fraction: number) => void): Promise<void> {
+  await extractionModel().initializeDeviceModel(onProgress);
+}
+
+export interface ExtractResult { data: Extraction; source: InferenceSource | undefined; ms: number }
+
+export async function extractOnDevice(note: string, photo?: { base64: string; mimeType: 'image/jpeg' | 'image/png' }): Promise<ExtractResult> {
+  const t0 = performance.now();
+  const parts: Part[] = [{ type: 'text', text: photo
+    ? `Doorstep note: """${note || '(none)'}"""\nThe photo shows a medicine label or a medical device plate. Use it to fill deviceType, insulin or needs. Ignore any patient name on the label.`
+    : `Doorstep note: """${note}"""` }];
+  if (photo) parts.push({ type: 'inlineData', inlineData: { data: photo.base64, mimeType: photo.mimeType } });
+  const res = await extractionModel().generateContent(parts);
+  const source = res.response.inferenceSource;
+  if (source !== 'on_device') throw new Error('Refused: doorstep data may only be processed on this device.');
+  return { data: normalizeExtraction(parseModelJson(res.response.text())), source, ms: Math.round(performance.now() - t0) };
+}
+
+let summarizer: GenerativeModel | null = null;
+/** Coordinator view: one calm sentence about a household. On-device when possible. */
+export async function oneLiner(facts: string): Promise<{ text: string; source: InferenceSource | undefined }> {
+  const f = firebase();
+  if (!f) throw new Error('Firebase not configured');
+  summarizer ??= getGenerativeModel(f.ai, {
+    mode: InferenceMode.PREFER_ON_DEVICE,
+    onDeviceParams: { createOptions: EXPECTED },
+    inCloudParams: { model: 'gemini-3.5-flash-lite', generationConfig: { maxOutputTokens: 80 } },
+  });
+  const res = await summarizer.generateContent(
+    `In one short, calm sentence for a relief team, say what this household needs first and why. No names. Facts: ${facts}`);
+  return { text: res.response.text().trim(), source: res.response.inferenceSource };
+}

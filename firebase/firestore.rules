@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isMember(incident) {
+      return signedIn() && exists(/databases/$(database)/documents/incidents/$(incident)/members/$(request.auth.uid));
+    }
+    function isCoordinator(incident) {
+      return isMember(incident) &&
+        get(/databases/$(database)/documents/incidents/$(incident)/members/$(request.auth.uid)).data.role == 'coordinator';
+    }
+
+    // Server-side privacy guarantee: a household may only contain these fields.
+    // There is no name, transcript, photo or free-text notes field, so none can be stored.
+    function validHousehold(incident, id) {
+      let d = request.resource.data;
+      return d.keys().hasOnly([
+          'id', 'incidentId', 'buildingId', 'reportedAt', 'reportedBy', 'source', 'rulebookVersion', 'visits',
+          'descriptor', 'adults', 'over65', 'children', 'infantsUnder1', 'livesAlone',
+          'deviceType', 'devicePower', 'deviceBatteryHours', 'dialysis', 'dialysisLastSessionHoursAgo',
+          'insulin', 'insulinRefrigerated', 'insulinSupplyDays', 'hasCooling', 'mobilityLimited',
+          'waterDaysLeft', 'infantFormulaDaysLeft', 'needs'])
+        && d.id == id && d.incidentId == incident
+        && d.descriptor is string && d.descriptor.size() <= 60
+        && d.source in ['on_device', 'tap']
+        && d.needs is list && d.needs.size() <= 10
+        && d.reportedAt is int;
+    }
+
+    match /incidents/{incident} {
+      allow read: if isMember(incident);
+      allow write: if false; // incidents are created from the console / admin script
+
+      match /members/{uid} {
+        allow read: if signedIn() && request.auth.uid == uid;
+        // Join with the incident's code. Coordinators are promoted in the console.
+        allow create: if signedIn() && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['code', 'role', 'joinedAt'])
+          && request.resource.data.role == 'volunteer'
+          && request.resource.data.code == get(/databases/$(database)/documents/incidents/$(incident)).data.joinCode;
+      }
+
+      match /households/{id} {
+        allow read: if isMember(incident);
+        allow create, update: if isMember(incident) && validHousehold(incident, id);
+        allow delete: if isCoordinator(incident); // merges
+      }
+
+      match /runs/{id} {
+        allow read: if isMember(incident);
+        allow create: if isCoordinator(incident);
+      }
+    }
+  }
+}

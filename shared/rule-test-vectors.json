@@ -1,0 +1,93 @@
+{
+  "$comment": "Shared by the TypeScript and Kotlin rules engines - both must pass every case. Times are hours relative to reportedAt. Each case's household is merged over `base`. Uses rulebook.example.json.",
+  "reportedAt": 1800000000000,
+  "base": {
+    "descriptor": "", "adults": -1, "over65": -1, "children": -1, "infantsUnder1": -1,
+    "livesAlone": "unknown", "deviceType": "none", "devicePower": "unknown", "deviceBatteryHours": -1,
+    "dialysis": "no", "dialysisLastSessionHoursAgo": -1,
+    "insulin": "no", "insulinRefrigerated": "unknown", "insulinSupplyDays": -1,
+    "hasCooling": "unknown", "mobilityLimited": "unknown",
+    "waterDaysLeft": -1, "infantFormulaDaysLeft": -1, "needs": []
+  },
+  "cases": [
+    { "name": "oxygen, no power, 3h battery -> 2h deadline after 1h margin",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "deviceType": "oxygen_concentrator", "devicePower": "none", "deviceBatteryHours": 3 },
+      "expect": { "priority": "P1", "deadlineH": 2, "overdue": false, "nextCheckH": 2, "hazards": ["powered_device"] } },
+
+    { "name": "oxygen, no power, battery unknown -> deadline is now",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "deviceType": "oxygen_concentrator", "devicePower": "none" },
+      "expect": { "priority": "P1", "deadlineH": 0, "overdue": false, "nextCheckH": 0, "hazards": ["powered_device"] } },
+
+    { "name": "oxygen, power unknown -> unknown critical, ask, P1",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "deviceType": "oxygen_concentrator", "devicePower": "unknown" },
+      "expect": { "priority": "P1", "deadlineH": null, "overdue": false, "nextCheckH": 2, "hazards": ["powered_device_unknown"] } },
+
+    { "name": "dialysis 60h ago -> 12h left, P2",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "dialysis": "yes", "dialysisLastSessionHoursAgo": 60 },
+      "expect": { "priority": "P2", "deadlineH": 12, "overdue": false, "nextCheckH": 8, "hazards": ["dialysis"] } },
+
+    { "name": "same dialysis household 13h later -> overdue, P1",
+      "incidentType": "flood", "nowH": 13,
+      "household": { "dialysis": "yes", "dialysisLastSessionHoursAgo": 60 },
+      "expect": { "priority": "P1", "deadlineH": 12, "overdue": true, "nextCheckH": 2, "hazards": ["dialysis"] } },
+
+    { "name": "dialysis 80h ago -> already overdue",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "dialysis": "yes", "dialysisLastSessionHoursAgo": 80 },
+      "expect": { "priority": "P1", "deadlineH": -8, "overdue": true, "nextCheckH": -8, "hazards": ["dialysis"] } },
+
+    { "name": "dialysis, last session unknown -> unknown critical",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "dialysis": "yes" },
+      "expect": { "priority": "P1", "deadlineH": null, "overdue": false, "nextCheckH": 2, "hazards": ["dialysis_unknown"] } },
+
+    { "name": "insulin unrefrigerated in a flood -> 28 days, P3",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "insulin": "yes", "insulinRefrigerated": "no" },
+      "expect": { "priority": "P3", "deadlineH": 672, "overdue": false, "nextCheckH": 24, "hazards": ["insulin"] } },
+
+    { "name": "insulin unrefrigerated in heat, 2 days supply -> supply wins",
+      "incidentType": "heat_wave", "nowH": 0,
+      "household": { "insulin": "yes", "insulinRefrigerated": "no", "insulinSupplyDays": 2 },
+      "expect": { "priority": "P3", "deadlineH": 48, "overdue": false, "nextCheckH": 24, "hazards": ["insulin"] } },
+
+    { "name": "heat wave, over 65, alone, no cooling -> P2 with 6h rechecks",
+      "incidentType": "heat_wave", "nowH": 0,
+      "household": { "over65": 1, "livesAlone": "yes", "hasCooling": "no" },
+      "expect": { "priority": "P2", "deadlineH": null, "overdue": false, "nextCheckH": 6, "hazards": ["heat_isolated"] } },
+
+    { "name": "same person in a flood -> no heat hazard",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "over65": 1, "livesAlone": "yes", "hasCooling": "no" },
+      "expect": { "priority": "P3", "deadlineH": null, "overdue": false, "nextCheckH": 24, "hazards": [] } },
+
+    { "name": "heat wave, over 65, living situation unknown -> ask",
+      "incidentType": "heat_wave", "nowH": 0,
+      "household": { "over65": 2, "hasCooling": "no" },
+      "expect": { "priority": "P2", "deadlineH": null, "overdue": false, "nextCheckH": 8, "hazards": ["heat_unknown"] } },
+
+    { "name": "infant, half a day of formula -> 12h, P2",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "infantsUnder1": 1, "infantFormulaDaysLeft": 0.5 },
+      "expect": { "priority": "P2", "deadlineH": 12, "overdue": false, "nextCheckH": 8, "hazards": ["infant_formula"] } },
+
+    { "name": "limited mobility and needs evacuation -> P2",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "mobilityLimited": "yes", "needs": ["evacuation"] },
+      "expect": { "priority": "P2", "deadlineH": null, "overdue": false, "nextCheckH": 8, "hazards": ["assisted_evacuation"] } },
+
+    { "name": "only needs food -> P3, never called safe",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "needs": ["food"] },
+      "expect": { "priority": "P3", "deadlineH": null, "overdue": false, "nextCheckH": 24, "hazards": [] } },
+
+    { "name": "oxygen 3h AND water 0.25 days -> earliest deadline wins",
+      "incidentType": "flood", "nowH": 0,
+      "household": { "deviceType": "oxygen_concentrator", "devicePower": "none", "deviceBatteryHours": 3, "waterDaysLeft": 0.25 },
+      "expect": { "priority": "P1", "deadlineH": 2, "overdue": false, "nextCheckH": 2, "hazards": ["powered_device", "water"] } }
+  ]
+}

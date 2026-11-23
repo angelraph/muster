@@ -1,0 +1,29 @@
+{
+  "$comment": "What the on-device model may return for one household. No name field exists, by design. Unknown numbers are -1; unknown facts are 'unknown'. Both clients (web + Android) use this exact shape.",
+  "type": "object",
+  "properties": {
+    "descriptor": { "type": "string", "description": "Short way to find the door, e.g. 'blue door, 2nd floor'. Never a person's name." },
+    "adults": { "type": "integer", "description": "Adults 18-64 present, -1 if unknown" },
+    "over65": { "type": "integer", "description": "People aged 65+, -1 if unknown" },
+    "children": { "type": "integer", "description": "Children 1-17, -1 if unknown" },
+    "infantsUnder1": { "type": "integer", "description": "Babies under 1 year, -1 if unknown" },
+    "livesAlone": { "type": "string", "enum": ["yes", "no", "unknown"] },
+    "deviceType": { "type": "string", "enum": ["none", "oxygen_concentrator", "ventilator", "cpap", "suction", "other_powered_medical", "unknown"] },
+    "devicePower": { "type": "string", "enum": ["ok", "none", "unknown"] },
+    "deviceBatteryHours": { "type": "number", "description": "Hours of battery or backup power left, -1 if unknown" },
+    "dialysis": { "type": "string", "enum": ["yes", "no", "unknown"] },
+    "dialysisLastSessionHoursAgo": { "type": "number", "description": "-1 if unknown" },
+    "insulin": { "type": "string", "enum": ["yes", "no", "unknown"] },
+    "insulinRefrigerated": { "type": "string", "enum": ["yes", "no", "unknown"] },
+    "insulinSupplyDays": { "type": "number", "description": "-1 if unknown" },
+    "hasCooling": { "type": "string", "enum": ["yes", "no", "unknown"] },
+    "mobilityLimited": { "type": "string", "enum": ["yes", "no", "unknown"] },
+    "waterDaysLeft": { "type": "number", "description": "-1 if unknown" },
+    "infantFormulaDaysLeft": { "type": "number", "description": "-1 if unknown" },
+    "needs": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["water", "food", "shelter", "power", "medication", "medical_transport", "evacuation", "baby_supplies", "mobility_help", "sanitation"] }
+    }
+  },
+  "required": ["descriptor", "adults", "over65", "children", "infantsUnder1", "livesAlone", "deviceType", "devicePower", "deviceBatteryHours", "dialysis", "dialysisLastSessionHoursAgo", "insulin", "insulinRefrigerated", "insulinSupplyDays", "hasCooling", "mobilityLimited", "waterDaysLeft", "infantFormulaDaysLeft", "needs"]
+}

@@ -1,0 +1,33 @@
+{
+  "version": "example-2026.11",
+  "label": "EXAMPLE VALUES - every threshold here must be set by the responding agency. Not medical advice.",
+  "priority": {
+    "p1WithinHours": 6,
+    "p2WithinHours": 24
+  },
+  "recheckHours": {
+    "P1": 2,
+    "P2": 8,
+    "P3": 24
+  },
+  "unknownCriticalRecheckHours": 2,
+  "poweredDevice": {
+    "assumedBatteryHoursWhenUnknown": 0,
+    "safetyMarginHours": 1
+  },
+  "dialysis": {
+    "maxHoursBetweenSessions": 72
+  },
+  "insulin": {
+    "unrefrigeratedDays": 28,
+    "unrefrigeratedDaysInHeat": 7
+  },
+  "heat": {
+    "incidentTypes": ["heat_wave"],
+    "minAgeBand": "over65",
+    "recheckHours": 6
+  },
+  "supplies": {
+    "warnBelowDays": 1
+  }
+}

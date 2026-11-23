@@ -1,0 +1,10 @@
+{
+  "name": "Muster",
+  "short_name": "Muster",
+  "description": "Find who will be harmed next after a disaster, even with the cell towers down.",
+  "start_url": "/#/volunteer",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#0f172a",
+  "icons": []
+}
