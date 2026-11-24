@@ -191,11 +191,41 @@ export function SafetyPage() {
   );
 }
 
+const DEMO_ID = 'j5xRXRV7lJ8';
+export const DEMO_URL = `https://www.youtube.com/watch?v=${DEMO_ID}`;
+
+/** Pinned demo. Shows the thumbnail only; nothing loads from YouTube until the viewer presses play. */
+function DemoVideo() {
+  const [play, setPlay] = useState(false);
+  return (
+    <section class="demo-pin" aria-label="Demo video">
+      <div class="demo-pin-head">
+        <span class="demo-pin-badge"><Icon name="play" size={14} /> Demo video · 2:52</span>
+        <a href={DEMO_URL} target="_blank" rel="noopener">Watch on YouTube <Icon name="arrowUpRight" size={14} /></a>
+      </div>
+      <div class="demo-pin-frame">
+        {play ? (
+          <iframe src={`https://www.youtube-nocookie.com/embed/${DEMO_ID}?autoplay=1&rel=0`} title="Muster demo video"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen />
+        ) : (
+          <button class="demo-pin-poster" onClick={() => setPlay(true)} aria-label="Play the Muster demo video">
+            <img src={`https://i.ytimg.com/vi/${DEMO_ID}/maxresdefault.jpg`} alt="" loading="lazy"
+              onError={(e) => { const im = e.currentTarget as HTMLImageElement; if (!im.src.includes('hqdefault')) im.src = `https://i.ytimg.com/vi/${DEMO_ID}/hqdefault.jpg`; }} />
+            <span class="demo-pin-play"><Icon name="play" size={30} /></span>
+          </button>
+        )}
+      </div>
+      <p class="demo-pin-note">The whole walkthrough, from the website to every screen. Everything shown is the real app, and the on-device read was recorded in Chrome with Gemini Nano.</p>
+    </section>
+  );
+}
+
 export function JudgesPage() {
   return (
     <>
       <PageHero eyebrow="For judges" title="Try Muster in five minutes." lead="Everything you need to see hybrid inference working on Web and Android." />
       <Doc>
+        <DemoVideo />
         <ol class="judge-steps">
           <li><b>Open the app.</b> <a href="#/home">Volunteer app</a> or <a href="#/board">coordinator board</a>. Join with the demo code provided in the submission, or scan the coordinator's invite QR.</li>
           <li><b>Load synthetic households.</b> On the coordinator board, use "Load demo households". The real map of Marshall, NC fills with clocks and team routes.</li>
