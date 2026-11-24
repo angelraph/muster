@@ -9,7 +9,7 @@ Muster finds those households **before their time runs out**, even when every ce
 
 Built for **#BuildHybridAI 2026** with **Firebase AI Logic hybrid inference** · Web (Chrome) + Android.
 
-**Live:** https://muster-hybrid.web.app · **For judges:** https://muster-hybrid.web.app/#/judges
+**Live:** https://muster-hybrid.web.app · **For judges:** https://muster-hybrid.web.app/#/judges · **Demo video (2:52):** https://www.youtube.com/watch?v=j5xRXRV7lJ8
 
 ---
 
