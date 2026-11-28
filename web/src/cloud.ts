@@ -60,7 +60,8 @@ export async function generateRunSheet(households: CloudHousehold[], teams: numb
 For each team: a 2-sentence briefing, a short "bring" list of supplies/equipment implied by the stops (e.g. generator or battery pack for powered medical devices, water, baby formula, cooling packs, wheelchair-capable vehicle), and for each stop a one-line "why" a volunteer can read at the door.
 Then a "handover" paragraph (max 6 sentences) for the next shift: what is overdue, what is unknown and must be asked, and where nobody has been yet.
 In the input, -1 or "unknown" means nobody could find out - say "unknown", never assume.
-Use only refs that appear in the input. No names. Not medical advice.
+Use only refs that appear in the input, and only in each stop's "ref" field: never write a ref code in a briefing, "why" or handover. In prose, describe a stop by its hazard (e.g. "the oxygen stop") or its order ("stop 2").
+No names. Not medical advice.
 INPUT:
 ${JSON.stringify(request)}`;
 

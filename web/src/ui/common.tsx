@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import { localConfig, loadLiveConfig, firebase, type LiveConfig } from '../firebase';
-import { onConfigChange, subscribeHouseholds } from '../store';
+import { INCIDENT_ID, onConfigChange, saveHousehold, subscribeHouseholds } from '../store';
+import { demoScenario } from '../core/scenario';
 import type { Household, Priority } from '../core/types';
 
 export function useNow(intervalMs = 1000): number {
@@ -22,8 +23,24 @@ export function useOnline(): boolean {
 export function useHouseholds(): Household[] {
   const [list, setList] = useState<Household[]>([]);
   useEffect(() => subscribeHouseholds(setList), []);
+  useEffect(() => refreshStaleDemo(list), [list]);
   return list;
 }
+
+// Synthetic demo households would otherwise age forever ("overdue 5 d") and stop showing the scenario.
+// Re-time only demo records (fixed IDs) that are still present, so merges stay merged. Real records are never touched.
+let demoChecked = false;
+function refreshStaleDemo(list: Household[]) {
+  if (demoChecked || !list.length) return;
+  demoChecked = true;
+  const now = Date.now();
+  const fresh = new Map(demoScenario(now, INCIDENT_ID).map((h) => [h.id, h]));
+  for (const h of list) {
+    const f = fresh.get(h.id);
+    if (f && now - h.reportedAt > DEMO_MAX_AGE_MS) saveHousehold(f);
+  }
+}
+const DEMO_MAX_AGE_MS = 12 * 3_600_000;
 
 export function useLiveConfig(): [LiveConfig, () => void] {
   const [cfg, setCfg] = useState<LiveConfig>(localConfig());
