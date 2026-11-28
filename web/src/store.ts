@@ -54,7 +54,9 @@ export async function membership(): Promise<'volunteer' | 'coordinator' | 'none'
   if (!f) return 'coordinator';
   const cached = localStorage.getItem(`muster.role.${INCIDENT_ID}`) as 'volunteer' | 'coordinator' | null;
   try {
-    const snap = await getDoc(doc(f.db, 'incidents', INCIDENT_ID, 'members', await f.uid));
+    // Never hang on "Loading…": if sign-in can't reach Google (no signal, blocked network), fall back after 8 s.
+    const uid = await Promise.race([f.uid, new Promise<never>((_, no) => setTimeout(() => no(new Error('sign-in timeout')), 8000))]);
+    const snap = await getDoc(doc(f.db, 'incidents', INCIDENT_ID, 'members', uid));
     const role = snap.exists() ? ((snap.data().role as 'volunteer' | 'coordinator') ?? 'volunteer') : 'none';
     if (role !== 'none') localStorage.setItem(`muster.role.${INCIDENT_ID}`, role);
     return role;
